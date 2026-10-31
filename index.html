@@ -1,0 +1,1145 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#090b0e">
+<title>LIVE DISH-AI | Complete Restaurant Technology</title>
+<meta name="description" content="LIVE DISH-AI – One platform for complete restaurant management. AR menus, AI ordering, reservations, inventory and restaurant automation.">
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+:root {
+  --bg:#090b0e;
+  --panel:#11151a;
+  --panel2:#171c22;
+  --orange:#ff7138;
+  --gold:#ffbd76;
+  --white:#f8f7f4;
+  --muted:#9a9da5;
+  --line:rgba(255,255,255,.09);
+}
+
+* {box-sizing:border-box;margin:0;padding:0}
+html {scroll-behavior:smooth}
+body {
+  background:var(--bg);
+  color:var(--white);
+  font-family:'DM Sans',sans-serif;
+  overflow-x:hidden;
+}
+a {text-decoration:none;color:inherit}
+button {font:inherit;cursor:pointer}
+img {max-width:100%;display:block}
+::selection {background:var(--orange);color:#111}
+
+.cursor-glow {
+  position:fixed;
+  width:350px;height:350px;
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(255,113,56,.09),transparent 70%);
+  pointer-events:none;
+  transform:translate(-50%,-50%);
+  z-index:0;
+}
+.noise {
+  position:fixed;inset:0;pointer-events:none;z-index:10;
+  opacity:.025;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.6'/%3E%3C/svg%3E");
+}
+.container {width:min(1200px,90%);margin:auto;position:relative;z-index:1}
+.orange {color:var(--orange)}
+.gradient-text {
+  background:linear-gradient(100deg,#fff 5%,#ffbd76 45%,#ff7138 90%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.eyebrow {
+  display:inline-flex;align-items:center;gap:9px;
+  color:var(--gold);font-size:11px;font-weight:700;
+  letter-spacing:2.5px;text-transform:uppercase;
+}
+.dot {
+  width:7px;height:7px;border-radius:50%;
+  background:var(--orange);box-shadow:0 0 15px var(--orange);
+}
+.section {padding:110px 0}
+.section-heading {max-width:700px;margin-bottom:48px}
+.section-heading h2 {
+  font-family:'Space Grotesk',sans-serif;
+  font-size:clamp(36px,5vw,58px);
+  line-height:1.08;letter-spacing:-2.5px;margin:18px 0;
+}
+.section-heading p {color:var(--muted);line-height:1.8;font-size:15px}
+
+/* NAVIGATION */
+header {
+  height:82px;position:fixed;top:0;left:0;right:0;z-index:100;
+  background:rgba(9,11,14,.78);
+  backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--line);
+}
+.nav {
+  height:100%;display:flex;align-items:center;justify-content:space-between;
+}
+.logo {
+  font-family:'Space Grotesk',sans-serif;font-weight:800;
+  font-size:23px;letter-spacing:-1.4px;
+}
+.logo span {color:var(--orange)}
+.logo small {
+  display:block;font-family:'DM Sans';font-size:8px;
+  letter-spacing:3px;color:#858a91;font-weight:600;
+}
+.nav-links {display:flex;align-items:center;gap:30px}
+.nav-links a {font-size:12px;color:#c1c2c6;transition:.3s}
+.nav-links a:hover {color:var(--orange)}
+.btn {
+  display:inline-flex;align-items:center;justify-content:center;
+  gap:10px;padding:14px 22px;border-radius:8px;
+  border:1px solid transparent;font-size:12px;font-weight:700;
+  transition:.3s;
+}
+.btn-primary {
+  background:linear-gradient(110deg,#ff8c4b,#ff6332);
+  color:#101010;box-shadow:0 8px 30px rgba(255,104,52,.17);
+}
+.btn-primary:hover {transform:translateY(-3px);box-shadow:0 12px 35px #ff71383a}
+.btn-outline {border-color:var(--line);background:#ffffff08;color:white}
+.btn-outline:hover {border-color:var(--orange);color:var(--gold)}
+.menu-toggle {display:none;background:none;border:0;color:white;font-size:25px}
+
+/* HERO */
+.hero {
+  min-height:850px;padding:155px 0 80px;
+  display:flex;align-items:center;position:relative;overflow:hidden;
+  background:
+  radial-gradient(ellipse at 77% 43%,rgba(255,105,49,.13),transparent 40%),
+  radial-gradient(ellipse at 15% 70%,rgba(255,155,85,.055),transparent 35%);
+}
+.hero-grid {display:grid;grid-template-columns:1.05fr .95fr;align-items:center;gap:30px}
+.hero h1 {
+  font-family:'Space Grotesk',sans-serif;
+  font-size:clamp(52px,6.5vw,84px);
+  letter-spacing:-5px;line-height:.99;margin:25px 0;
+}
+.hero-copy {max-width:540px;color:#a9adb4;font-size:15px;line-height:1.9}
+.hero-actions {display:flex;gap:13px;flex-wrap:wrap;margin:32px 0}
+.hero-note {font-size:11px;color:#81868d;margin-top:20px}
+.hero-note span {color:var(--gold)}
+.hero-visual {
+  height:510px;position:relative;perspective:1000px;
+  display:flex;align-items:center;justify-content:center;
+}
+.orbit {
+  position:absolute;width:430px;height:430px;border-radius:50%;
+  border:1px solid rgba(255,172,113,.14);
+  transform:rotateX(65deg);
+  animation:orbit 18s linear infinite;
+}
+.orbit:before,.orbit:after {
+  content:"";position:absolute;border:1px solid rgba(255,172,113,.12);
+  border-radius:50%;inset:35px;
+}
+.orbit:after {inset:80px}
+@keyframes orbit {to{transform:rotateX(65deg) rotateZ(360deg)}}
+.food-stage {
+  width:340px;height:340px;position:relative;
+  display:flex;align-items:center;justify-content:center;
+  transform-style:preserve-3d;
+  animation:float 5s ease-in-out infinite;
+}
+@keyframes float {
+  0%,100% {transform:translateY(0) rotateY(-7deg)}
+  50% {transform:translateY(-17px) rotateY(8deg)}
+}
+.food-halo {
+  position:absolute;width:310px;height:310px;border-radius:50%;
+  background:radial-gradient(circle,rgba(255,126,53,.22),transparent 68%);
+  filter:blur(15px);
+}
+.food-image {
+  width:290px;height:290px;border-radius:50%;
+  background-image:url('https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=900&q=90');
+  background-size:cover;background-position:center;
+  border:10px solid #28221c;
+  box-shadow:0 25px 90px #000,0 0 60px #ff71382b;
+  transform:translateZ(45px);
+}
+.float-card {
+  position:absolute;background:rgba(25,29,33,.88);
+  border:1px solid #ffffff19;backdrop-filter:blur(18px);
+  padding:13px 17px;border-radius:12px;
+  box-shadow:0 20px 50px #0007;
+  animation:float 5s ease-in-out infinite;
+}
+.float-card strong {font-size:12px;display:block}
+.float-card small {font-size:10px;color:#999}
+.float-card .symbol {font-size:20px;color:var(--orange)}
+.card-one {top:75px;right:0}
+.card-two {bottom:75px;left:0;animation-delay:-2s}
+.card-three {right:10px;bottom:55px;animation-delay:-1s}
+.hero-scroll {
+  position:absolute;bottom:28px;left:50%;transform:translateX(-50%);
+  color:#727780;font-size:9px;letter-spacing:3px;
+}
+.hero-scroll:after {
+  content:"";display:block;width:1px;height:30px;
+  background:linear-gradient(var(--orange),transparent);
+  margin:12px auto 0;
+}
+
+/* TRUST BAR */
+.trust {padding:26px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.trust-inner {display:flex;align-items:center;justify-content:space-between;gap:25px;flex-wrap:wrap}
+.trust p {font-size:10px;color:#777e86;letter-spacing:1.5px;text-transform:uppercase}
+.trust strong {font-family:'Space Grotesk';font-size:14px;color:#777e86;letter-spacing:1px}
+
+/* PRODUCT ECOSYSTEM */
+.products {background:linear-gradient(180deg,#0b0e11,#101317 50%,#0b0e11)}
+.category-title {
+  display:flex;align-items:center;justify-content:space-between;
+  margin:55px 0 23px;padding-bottom:16px;border-bottom:1px solid var(--line);
+}
+.category-title h3 {font-family:'Space Grotesk';font-size:21px}
+.category-title span {color:var(--muted);font-size:11px}
+.filter-row {display:flex;gap:9px;flex-wrap:wrap;margin-bottom:30px}
+.filter {
+  background:#ffffff07;border:1px solid var(--line);color:#aaa;
+  padding:10px 17px;border-radius:30px;font-size:11px;
+}
+.filter.active,.filter:hover {background:#ff71381c;color:var(--gold);border-color:#ff71385a}
+.product-grid {display:grid;grid-template-columns:repeat(3,1fr);gap:17px}
+.product-card {
+  position:relative;min-height:280px;padding:25px;
+  border:1px solid var(--line);border-radius:14px;
+  background:linear-gradient(145deg,#171b20,#101317);
+  overflow:hidden;transition:transform .35s,border-color .35s,box-shadow .35s;
+  transform-style:preserve-3d;
+}
+.product-card:hover {
+  border-color:#ff8b4c75;box-shadow:0 20px 50px #0006,0 0 25px #ff71380b;
+}
+.product-card:before {
+  content:"";position:absolute;width:170px;height:170px;
+  right:-70px;top:-75px;border-radius:50%;
+  background:var(--glow,rgba(255,113,56,.13));filter:blur(45px);
+}
+.product-top {display:flex;align-items:center;justify-content:space-between}
+.product-icon {
+  width:48px;height:48px;border-radius:12px;
+  display:grid;place-items:center;font-size:23px;
+  background:#ff71381a;border:1px solid #ff71382b;
+}
+.product-number {font-size:10px;color:#686e77;letter-spacing:2px}
+.product-card h4 {font-family:'Space Grotesk';font-size:20px;margin:28px 0 9px}
+.product-card p {font-size:12px;line-height:1.7;color:#9398a0;min-height:42px}
+.product-bottom {display:flex;align-items:center;justify-content:space-between;margin-top:22px}
+.product-tag {font-size:9px;color:var(--gold);text-transform:uppercase;letter-spacing:1.4px}
+.product-arrow {
+  width:30px;height:30px;border:1px solid var(--line);
+  border-radius:50%;display:grid;place-items:center;color:var(--orange);
+}
+.product-card[hidden] {display:none}
+
+/* FEATURED AR */
+.featured {overflow:hidden;background:#111419}
+.feature-grid {display:grid;grid-template-columns:1fr 1fr;gap:70px;align-items:center}
+.feature-copy h2 {font-family:'Space Grotesk';font-size:clamp(38px,5vw,60px);line-height:1.05;letter-spacing:-2.5px;margin:20px 0}
+.feature-copy p {font-size:14px;color:var(--muted);line-height:1.9}
+.feature-list {display:grid;grid-template-columns:1fr 1fr;gap:17px;margin:30px 0}
+.feature-item {font-size:12px;color:#d6d6d6;display:flex;gap:10px;align-items:center}
+.feature-item span {color:var(--orange)}
+.ar-scene {
+  height:460px;border-radius:22px;position:relative;overflow:hidden;
+  background:radial-gradient(circle at 50% 45%,#54301f,#1b1716 45%,#111419 75%);
+  border:1px solid #ffffff15;perspective:1000px;
+  display:grid;place-items:center;
+}
+.ar-scene:before {
+  content:"";position:absolute;width:320px;height:320px;
+  border:1px solid #ffbd7645;border-radius:50%;transform:rotateX(70deg);
+}
+.ar-dish {
+  width:250px;height:250px;border-radius:50%;
+  background:url('https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=700&q=85') center/cover;
+  border:12px solid #dfd3bd;
+  box-shadow:0 35px 60px #0009,0 0 45px #ff9a4b35;
+  animation:dishFloat 5s ease-in-out infinite;
+}
+@keyframes dishFloat {
+  0%,100% {transform:translateY(0) rotateX(8deg) rotateY(-8deg)}
+  50% {transform:translateY(-18px) rotateX(-3deg) rotateY(8deg)}
+}
+.ar-label {
+  position:absolute;background:#15191de8;border:1px solid #ffffff25;
+  padding:13px 16px;border-radius:10px;font-size:11px;backdrop-filter:blur(15px);
+}
+.ar-label strong {display:block;font-size:13px;margin-bottom:4px}
+.ar-label small {color:#aaa}
+.label-a {top:45px;left:30px}
+.label-b {right:25px;bottom:65px}
+.scan-ring {
+  position:absolute;width:290px;height:290px;border:1px dashed #ffbd7680;
+  border-radius:50%;animation:orbit 15s linear infinite;
+}
+
+/* CONNECTED ECOSYSTEM */
+.ecosystem {background:radial-gradient(ellipse at center,#18202a,#0b0e11 65%)}
+.eco-panel {
+  padding:55px 35px;border:1px solid #ffffff15;border-radius:20px;
+  background:#ffffff05;text-align:center;
+}
+.eco-center {
+  margin:0 auto 35px;width:210px;padding:25px 15px;
+  border:1px solid #ff8a4a80;border-radius:16px;
+  background:linear-gradient(145deg,#352219,#191b1e);
+  box-shadow:0 0 55px #ff713826;
+}
+.eco-center strong {font-family:'Space Grotesk';font-size:22px}
+.eco-center small {display:block;color:var(--gold);font-size:9px;margin-top:8px;letter-spacing:2px}
+.eco-grid {display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.eco-node {
+  background:#151a20;border:1px solid var(--line);
+  padding:18px 10px;border-radius:11px;font-size:11px;color:#ccc;
+  transition:.3s;
+}
+.eco-node:hover {border-color:var(--orange);transform:translateY(-5px)}
+.eco-node span {display:block;font-size:23px;margin-bottom:10px}
+
+/* FEATURES */
+.benefit-grid {display:grid;grid-template-columns:repeat(3,1fr);gap:17px}
+.benefit {
+  padding:27px;border:1px solid var(--line);border-radius:14px;
+  background:linear-gradient(145deg,#15191e,#0d1014);
+}
+.benefit .icon {font-size:26px;margin-bottom:20px}
+.benefit h3 {font-family:'Space Grotesk';font-size:17px;margin-bottom:10px}
+.benefit p {color:var(--muted);font-size:12px;line-height:1.8}
+
+/* PRICING */
+.pricing {background:#111419}
+.pricing-grid {display:grid;grid-template-columns:repeat(3,1fr);gap:17px}
+.price-card {
+  border:1px solid var(--line);border-radius:16px;padding:30px;
+  background:#0d1014;position:relative;
+}
+.price-card.popular {border-color:#ff7138;box-shadow:0 0 45px #ff713815}
+.popular-label {
+  position:absolute;top:-12px;right:20px;
+  background:var(--orange);color:#17100b;
+  padding:6px 12px;border-radius:20px;font-size:9px;font-weight:800;
+}
+.price-card h3 {font-family:'Space Grotesk';font-size:22px}
+.price-card .description {color:var(--muted);font-size:11px;margin:10px 0 25px}
+.price {font-family:'Space Grotesk';font-size:39px;font-weight:700}
+.price small {font-size:11px;color:#92969d;font-weight:400}
+.price-card ul {list-style:none;margin:25px 0}
+.price-card li {font-size:12px;color:#c1c3c7;padding:10px 0;border-bottom:1px solid #ffffff0b}
+.price-card li:before {content:"✓";color:var(--orange);margin-right:10px}
+.price-card .btn {width:100%}
+.billing {display:flex;gap:9px;justify-content:center;margin-bottom:40px}
+.billing button {border:1px solid var(--line);background:none;color:#aaa;padding:9px 18px;border-radius:25px;font-size:11px}
+.billing button.active {background:#ff71381a;border-color:var(--orange);color:var(--gold)}
+
+/* CTA */
+.cta {padding:110px 0}
+.cta-panel {
+  text-align:center;padding:75px 25px;border-radius:22px;
+  border:1px solid #ff8b4c42;
+  background:radial-gradient(ellipse at 50% 110%,#67301d 0%,#201711 35%,#111419 75%);
+  overflow:hidden;position:relative;
+}
+.cta-panel h2 {font-family:'Space Grotesk';font-size:clamp(35px,5vw,57px);letter-spacing:-2px;margin:20px 0}
+.cta-panel p {color:#b4b2ae;font-size:14px;line-height:1.8;margin-bottom:25px}
+
+/* FOOTER */
+footer {padding:65px 0 25px;border-top:1px solid var(--line);background:#080a0c}
+.footer-grid {display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px}
+.footer-about p {color:#858b92;font-size:12px;line-height:1.9;max-width:310px;margin:18px 0}
+.footer-col h4 {font-size:12px;margin-bottom:20px}
+.footer-col a {display:block;font-size:11px;color:#858b92;margin:13px 0;transition:.3s}
+.footer-col a:hover {color:var(--orange)}
+.footer-bottom {
+  border-top:1px solid var(--line);margin-top:45px;padding-top:23px;
+  display:flex;justify-content:space-between;gap:15px;
+  color:#777d84;font-size:10px;
+}
+
+/* MODAL */
+.modal {
+  position:fixed;inset:0;z-index:200;display:none;
+  align-items:center;justify-content:center;
+  padding:20px;background:#000b;backdrop-filter:blur(10px);
+}
+.modal.show {display:flex}
+.modal-box {
+  background:#15191e;border:1px solid #ffffff22;
+  border-radius:18px;padding:32px;width:min(470px,100%);
+  position:relative;
+}
+.modal-box h2 {font-family:'Space Grotesk';font-size:27px;margin-bottom:10px}
+.modal-box p {font-size:12px;color:var(--muted);line-height:1.7;margin-bottom:23px}
+.close-modal {position:absolute;right:20px;top:17px;background:none;border:0;color:white;font-size:23px}
+.form-field {margin:13px 0}
+.form-field label {display:block;font-size:10px;color:#bbb;margin-bottom:7px}
+.form-field input,.form-field select,.form-field textarea {
+  width:100%;padding:13px;border-radius:7px;
+  border:1px solid var(--line);background:#0c1014;color:white;
+  font:12px 'DM Sans';outline:none;
+}
+.form-field input:focus,.form-field textarea:focus {border-color:var(--orange)}
+.modal-box .btn {width:100%;margin-top:10px}
+
+/* ANIMATIONS */
+.reveal {opacity:0;transform:translateY(30px);transition:opacity .8s,transform .8s}
+.reveal.visible {opacity:1;transform:translateY(0)}
+@keyframes pulse {50%{box-shadow:0 0 0 10px #ff713800}}
+.pulse {animation:pulse 2s infinite}
+
+@media(max-width:900px) {
+  .nav-links {
+    display:none;position:absolute;top:81px;left:0;right:0;
+    background:#111419;padding:25px;flex-direction:column;
+    align-items:stretch;border-bottom:1px solid var(--line);
+  }
+  .nav-links.open {display:flex}
+  .menu-toggle {display:block}
+  .nav .desktop-cta {display:none}
+  .hero-grid,.feature-grid {grid-template-columns:1fr}
+  .hero {padding-top:130px}
+  .hero-visual {height:430px}
+  .product-grid {grid-template-columns:repeat(2,1fr)}
+  .eco-grid {grid-template-columns:repeat(2,1fr)}
+  .footer-grid {grid-template-columns:1fr 1fr}
+}
+@media(max-width:600px) {
+  .section {padding:75px 0}
+  .hero h1 {font-size:55px;letter-spacing:-3px}
+  .hero-visual {height:370px}
+  .food-stage {transform:scale(.83)}
+  .orbit {width:300px;height:300px}
+  .card-one {right:-3px;top:35px}
+  .card-two {left:-3px;bottom:35px}
+  .card-three {display:none}
+  .product-grid,.benefit-grid,.pricing-grid {grid-template-columns:1fr}
+  .product-card {min-height:250px}
+  .feature-list {grid-template-columns:1fr}
+  .ar-scene {height:350px}
+  .ar-dish {width:205px;height:205px}
+  .eco-panel {padding:35px 15px}
+  .footer-grid {grid-template-columns:1fr 1fr;gap:25px}
+  .footer-about {grid-column:1/-1}
+  .footer-bottom {flex-direction:column}
+  .trust-inner {justify-content:center}
+}
+</style>
+</head>
+
+<body>
+
+<div class="cursor-glow" id="cursorGlow"></div>
+<div class="noise"></div>
+
+<!-- NAVIGATION -->
+<header>
+  <div class="container nav">
+    <a href="#home" class="logo">
+      LIVE<span>DISH</span>-AI
+      <small>RESTAURANT TECHNOLOGY</small>
+    </a>
+
+    <nav class="nav-links" id="navLinks">
+      <a href="#home">Home</a>
+      <a href="#products">Products</a>
+      <a href="#ecosystem">Platform</a>
+      <a href="#features">Features</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#contact">Contact</a>
+    </nav>
+
+    <button class="btn btn-primary desktop-cta" onclick="openModal()">
+      Book a Demo ↗
+    </button>
+    <button class="menu-toggle" id="menuToggle" aria-label="Open navigation">☰</button>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="container hero-grid">
+
+    <div class="hero-content reveal">
+      <div class="eyebrow"><span class="dot pulse"></span> THE FUTURE OF RESTAURANT TECHNOLOGY</div>
+
+      <h1>
+        Your Restaurant.<br>
+        <span class="gradient-text">Reimagined.</span>
+      </h1>
+
+      <p class="hero-copy">
+        One intelligent platform to transform how restaurants
+        serve customers, manage operations and grow their business.
+        Experience the power of 3D, AR and AI — all under one roof.
+      </p>
+
+      <div class="hero-actions">
+        <a href="#products" class="btn btn-primary">Explore Our Ecosystem ↗</a>
+        <button class="btn btn-outline" onclick="openModal()">Schedule a Demo ▶</button>
+      </div>
+
+      <div class="hero-note">
+        <span>✦</span> Customer Experience &nbsp; · &nbsp;
+        Restaurant Operations &nbsp; · &nbsp; AI Automation
+      </div>
+    </div>
+
+    <div class="hero-visual reveal" id="heroVisual">
+      <div class="orbit"></div>
+      <div class="food-stage" id="foodStage">
+        <div class="food-halo"></div>
+        <div class="food-image"></div>
+      </div>
+
+      <div class="float-card card-one">
+        <div class="symbol">✦</div>
+        <strong>AI Powered</strong>
+        <small>Smarter restaurant operations</small>
+      </div>
+
+      <div class="float-card card-two">
+        <div class="symbol">◎</div>
+        <strong>3D + AR Experience</strong>
+        <small>See it before you order</small>
+      </div>
+
+      <div class="float-card card-three">
+        <strong>One Platform</strong>
+        <small>Complete restaurant control</small>
+      </div>
+    </div>
+
+  </div>
+  <div class="hero-scroll">SCROLL TO EXPLORE</div>
+</section>
+
+<!-- TRUST -->
+<section class="trust">
+  <div class="container trust-inner">
+    <p>Built for the modern hospitality industry</p>
+    <strong>CAFÉS</strong>
+    <strong>FINE DINING</strong>
+    <strong>HOTELS</strong>
+    <strong>QSR</strong>
+    <strong>RESTAURANT CHAINS</strong>
+  </div>
+</section>
+
+<!-- PRODUCTS -->
+<section class="section products" id="products">
+  <div class="container">
+
+    <div class="section-heading reveal">
+      <div class="eyebrow"><span class="dot"></span> OUR PRODUCT ECOSYSTEM</div>
+      <h2>Everything your restaurant needs. <span class="gradient-text">One ecosystem.</span></h2>
+      <p>
+        Discover intelligent applications designed to simplify
+        every part of the restaurant journey — from the first customer
+        interaction to the final business report.
+      </p>
+    </div>
+
+    <div class="filter-row reveal">
+      <button class="filter active" data-filter="all">All Products</button>
+      <button class="filter" data-filter="experience">Customer Experience</button>
+      <button class="filter" data-filter="operations">Restaurant Operations</button>
+      <button class="filter" data-filter="ai">AI & Growth</button>
+    </div>
+
+    <div class="category-title">
+      <h3>01 / Customer Experience</h3>
+      <span>Discover · Order · Experience · Return</span>
+    </div>
+
+    <div class="product-grid">
+
+      <article class="product-card" data-category="experience">
+        <div class="product-top"><div class="product-icon">🥽</div><span class="product-number">01</span></div>
+        <h4>Scanivore</h4>
+        <p>More orders. Less effort. Powered by AR and AI. An immersive customer ordering experience.</p>
+        <div class="product-bottom"><span class="product-tag">AR EXPERIENCE</span><span class="product-arrow">↗</span></div>
+      </article>
+
+      <article class="product-card" data-category="experience">
+        <div class="product-top"><div class="product-icon">🍜</div><span class="product-number">02</span></div>
+        <h4>LiveDish AI</h4>
+        <p>Transform ordinary menus into immersive 3D and augmented reality food experiences.</p>
+        <div class="product-bottom"><span class="product-tag">3D + WEBAR</span><span class="product-arrow">↗</span></div>
+      </article>
+
+      <article class="product-card" data-category="experience">
+        <div class="product-top"><div class="product-icon">🛒</div><span class="product-number">03</span></div>
+        <h4>Smart Ordering</h4>
+        <p>Your own restaurant ordering platform for dine-in, takeaway and delivery.</p>
+        <div class="product-bottom"><span class="product-tag">ONLINE ORDERS</span><span class="product-arrow">↗</span></div>
+      </article>
+
+      <article class="product-card" data-category="experience">
+        <div class="product-top"><div class="product-icon">📅</div><span class="product-number">04</span></div>
+        <h4>TableBook AI</h4>
+        <p>Smart table reservations, live availability and automated booking management.</p>
+        <div class="product-bottom"><span class="product-tag">RESERVATIONS</span><span class="product-arrow">↗</span></div>
+      </article>
+
+      <article class="product-card" data-category="experience">
+        <div class="product-top"><div class="product-icon">🎁</div><span class="product-number">05</span></div>
+        <h4>Foodie Rewards</h4>
+        <p>Turn first-time visitors into loyal customers through points, rewards and referrals.</p>
+        <div class="product-bottom"><span class="product-tag">LOYALTY</span><span class="product-arrow">↗</span></div>
+      </article>
+
+      <article class="product-card" data-category="experience">
+        <div class="product-top"><div class="product-icon">🤖</div><span class="product-number">06</span></div>
+        <h4>FoodMate AI</h4>
+        <p>Intelligent food recommendations based on customer taste, preferences and budget.</p>
+        <div class="product-bottom"><span class="product-tag">AI ASSISTANT</span><span class="product-arrow">↗</span></div>
+      </article>
+
+    </div>
+
+    <div class="category-title">
+      <h3>02 / Restaurant Operations</h3>
+      <span>Manage · Monitor · Optimise · Grow</span>
+    </div>
+
+    <div class="product-grid">
+
+      <article class="product-card" data-category="operations">
+        <div class="product-top"><div class="product-icon">👨‍🍳</div><span class="product-number">07</span></div>
+        <h4>KitchenFlow</h4>
+        <p>Smart kitchen display, live order queue and preparation time management.</p>
+        <div class="product-bottom"><span class="product-tag">KITCHEN MANAGEMENT</span><span class="product-arrow">↗</span></div>
+      </article>
+
+      <article class="product-card" data-category="operations">
+        <div class="product-top"><div class="product-icon">📦</div><span class="product-number">08</span></div>
+        <h4>StockChef AI</h4>
+        <p>Manage ingredients, stock levels, expiry alerts, suppliers and food wastage.</p>
+        <div class="product-bottom"><span class="product-tag">INVENTORY</span><span class="product-arrow">↗</span></div>
+      </article>
+
+      <article class="product-card" data-category="operations">
+        <div class="product-top"><div class="product-icon">📊</div><span class="product-number">09</span></div>
+        <h4>RestaurantIQ</h4>
+        <p>Understand your business with sales analytics, performance reports and insights.</p>
+        <div class="product-bottom"><span class="product-tag">ANALYTICS</span><span class="product-arrow">↗</span></div>
+      </article>
+
+      <article class="product-card" data-category="operations">
+        <div class="product-top"><div class="product-icon">👥</div><span class="product-number">10</span></div>
+        <h4>StaffMate</h4>
+        <p>Manage employees, attendance, shifts, leave and team performance.</p>
+        <div class="product-bottom"><span class="product-tag">STAFF MANAGEMENT</span><span class="product-arrow">↗</span></div>
+      </article>
+
+      <article class="product-card" data-category="operations">
+        <div class="product-top"><div class="product-icon">🧮</div><span class="product-number">11</span></div>
+        <h4>MenuCost AI</h4>
+        <p>Calculate recipe costs, ingredient expenses, food margins and dish profitability.</p>
+        <div class="product-bottom"><span class="product-tag">FOOD COSTING</span><span class="product-arrow">↗</span></div>
+      </article>
+
+    </div>
+
+    <div class="category-title">
+      <h3>03 / AI & Business Growth</h3>
+      <span>Automate · Engage · Promote · Expand</span>
+    </div>
+
+    <div class="product-grid">
+
+      <article class="product-card" data-category="ai">
+        <div class="product-top"><div class="product-icon">📸</div><span class="product-number">12</span></div>
+        <h4>FoodStudio AI</h4>
+        <p>Create stunning food visuals, marketing creatives and promotional campaigns.</p>
+        <div class="product-bottom"><span class="product-tag">AI CREATIVE STUDIO</span><span class="product-arrow">↗</span></div>
+      </article>
+
+      <article class="product-card" data-category="ai">
+        <div class="product-top"><div class="product-icon">💬</div><span class="product-number">13</span></div>
+        <h4>WaiterBot AI</h4>
+        <p>Your virtual restaurant assistant for menu questions, recommendations and enquiries.</p>
+        <div class="product-bottom"><span class="product-tag">AI CHATBOT</span><span class="product-arrow">↗</span></div>
+      </article>
+
+      <article class="product-card" data-category="ai">
+        <div class="product-top"><div class="product-icon">⭐</div><span class="product-number">14</span></div>
+        <h4>ReviewBoost AI</h4>
+        <p>Collect feedback, understand customer sentiment and improve dining experiences.</p>
+        <div class="product-bottom"><span class="product-tag">CUSTOMER FEEDBACK</span><span class="product-arrow">↗</span></div>
+      </article>
+
+      <article class="product-card" data-category="ai">
+        <div class="product-top"><div class="product-icon">🚀</div><span class="product-number">15</span></div>
+        <h4>RestaurantMarketing AI</h4>
+        <p>Generate social campaigns, restaurant promotions and customer engagement content.</p>
+        <div class="product-bottom"><span class="product-tag">AI MARKETING</span><span class="product-arrow">↗</span></div>
+      </article>
+
+      <article class="product-card" data-category="ai">
+        <div class="product-top"><div class="product-icon">🌐</div><span class="product-number">16</span></div>
+        <h4>RestaurantOS</h4>
+        <p>A unified management environment connecting your restaurant's essential operations.</p>
+        <div class="product-bottom"><span class="product-tag">ALL-IN-ONE PLATFORM</span><span class="product-arrow">↗</span></div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- AR FEATURE -->
+<section class="section featured">
+  <div class="container feature-grid">
+    <div class="feature-copy reveal">
+      <div class="eyebrow"><span class="dot"></span> THE FUTURE IS ON YOUR TABLE</div>
+      <h2>Don't just read the menu. <span class="gradient-text">Experience it.</span></h2>
+      <p>
+        With LiveDish AI, customers can explore realistic 3D food models
+        and supported augmented reality experiences before placing an order.
+        A more engaging way to discover food.
+      </p>
+
+      <div class="feature-list">
+        <div class="feature-item"><span>✦</span> Interactive 3D dishes</div>
+        <div class="feature-item"><span>✦</span> WebAR placement</div>
+        <div class="feature-item"><span>✦</span> Multi-language menus</div>
+        <div class="feature-item"><span>✦</span> QR-based access</div>
+        <div class="feature-item"><span>✦</span> Dish information</div>
+        <div class="feature-item"><span>✦</span> Online ordering</div>
+      </div>
+
+      <a href="#contact" class="btn btn-primary">Discover LiveDish AI ↗</a>
+    </div>
+
+    <div class="ar-scene reveal">
+      <div class="scan-ring"></div>
+      <div class="ar-dish"></div>
+      <div class="ar-label label-a">
+        <strong>3D Food Experience</strong>
+        <small>Explore every detail</small>
+      </div>
+      <div class="ar-label label-b">
+        <strong>✦ AR Ready</strong>
+        <small>Bring dishes to your table</small>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ECOSYSTEM -->
+<section class="section ecosystem" id="ecosystem">
+  <div class="container">
+    <div class="section-heading reveal">
+      <div class="eyebrow"><span class="dot"></span> ONE CONNECTED PLATFORM</div>
+      <h2>All your restaurant operations. <span class="gradient-text">Working together.</span></h2>
+      <p>
+        Connect customer experience, restaurant operations and business
+        intelligence through one central management ecosystem.
+      </p>
+    </div>
+
+    <div class="eco-panel reveal">
+      <div class="eco-center">
+        <strong>LIVE DISH-AI</strong>
+        <small>RESTAURANT COMMAND CENTER</small>
+      </div>
+
+      <div class="eco-grid">
+        <div class="eco-node"><span>🍽️</span>Customer Experience</div>
+        <div class="eco-node"><span>🛒</span>Online Ordering</div>
+        <div class="eco-node"><span>📅</span>Reservations</div>
+        <div class="eco-node"><span>🎁</span>Loyalty & Rewards</div>
+        <div class="eco-node"><span>👨‍🍳</span>Kitchen Management</div>
+        <div class="eco-node"><span>📦</span>Inventory</div>
+        <div class="eco-node"><span>📊</span>Business Analytics</div>
+        <div class="eco-node"><span>🤖</span>AI Automation</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BENEFITS -->
+<section class="section" id="features">
+  <div class="container">
+    <div class="section-heading reveal">
+      <div class="eyebrow"><span class="dot"></span> WHY LIVE DISH-AI</div>
+      <h2>Technology that works as hard as <span class="gradient-text">your restaurant.</span></h2>
+      <p>Designed to help restaurants deliver better experiences while simplifying everyday operations.</p>
+    </div>
+
+    <div class="benefit-grid">
+      <div class="benefit reveal">
+        <div class="icon">⚡</div>
+        <h3>Operate Smarter</h3>
+        <p>Bring everyday restaurant workflows into connected digital tools.</p>
+      </div>
+      <div class="benefit reveal">
+        <div class="icon">✦</div>
+        <h3>AI-Powered Efficiency</h3>
+        <p>Use intelligent automation to simplify repetitive tasks and decisions.</p>
+      </div>
+      <div class="benefit reveal">
+        <div class="icon">🥽</div>
+        <h3>Immersive Experiences</h3>
+        <p>Bring 3D and augmented reality into the customer dining journey.</p>
+      </div>
+      <div class="benefit reveal">
+        <div class="icon">📱</div>
+        <h3>Mobile First</h3>
+        <p>Access restaurant experiences and management tools across devices.</p>
+      </div>
+      <div class="benefit reveal">
+        <div class="icon">🌍</div>
+        <h3>Ready to Scale</h3>
+        <p>Build your digital restaurant operations from one location to multiple branches.</p>
+      </div>
+      <div class="benefit reveal">
+        <div class="icon">🔗</div>
+        <h3>Connected Ecosystem</h3>
+        <p>Bring customer-facing applications and business management closer together.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="section pricing" id="pricing">
+  <div class="container">
+    <div class="section-heading reveal" style="text-align:center;margin-left:auto;margin-right:auto">
+      <div class="eyebrow"><span class="dot"></span> SIMPLE & FLEXIBLE PLANS</div>
+      <h2>Choose your path to <span class="gradient-text">smarter operations.</span></h2>
+      <p>Start with what you need. Expand as your restaurant grows.</p>
+    </div>
+
+    <div class="billing reveal">
+      <button class="active" data-billing="monthly">Monthly</button>
+      <button data-billing="yearly">Yearly · Save more</button>
+    </div>
+
+    <div class="pricing-grid">
+      <div class="price-card reveal">
+        <h3>Starter</h3>
+        <p class="description">For independent cafés and small restaurants.</p>
+        <div class="price" data-month="999" data-year="9990">₹999<small>/month</small></div>
+        <ul>
+          <li>Digital QR menu</li>
+          <li>Up to 50 dishes</li>
+          <li>Menu management</li>
+          <li>Basic analytics</li>
+          <li>Email support</li>
+        </ul>
+        <button class="btn btn-outline" onclick="openModal('Starter')">Get Started ↗</button>
+      </div>
+
+      <div class="price-card popular reveal">
+        <span class="popular-label">MOST POPULAR</span>
+        <h3>Professional</h3>
+        <p class="description">For growing and premium restaurants.</p>
+        <div class="price" data-month="2499" data-year="24990">₹2,499<small>/month</small></div>
+        <ul>
+          <li>Everything in Starter</li>
+          <li>3D food experiences</li>
+          <li>WebAR features</li>
+          <li>Multi-language menus</li>
+          <li>Online ordering</li>
+          <li>Customer analytics</li>
+        </ul>
+        <button class="btn btn-primary" onclick="openModal('Professional')">Get Started ↗</button>
+      </div>
+
+      <div class="price-card reveal">
+        <h3>Enterprise</h3>
+        <p class="description">For hotel groups and restaurant chains.</p>
+        <div class="price" data-month="4999" data-year="49990">₹4,999<small>/month onwards</small></div>
+        <ul>
+          <li>Everything in Professional</li>
+          <li>Multiple branches</li>
+          <li>Central dashboard</li>
+          <li>Advanced analytics</li>
+          <li>Custom integrations</li>
+          <li>Priority support</li>
+        </ul>
+        <button class="btn btn-outline" onclick="openModal('Enterprise')">Contact Sales ↗</button>
+      </div>
+    </div>
+    <p style="text-align:center;color:#858a91;font-size:10px;margin-top:24px">
+      Indicative starting prices. Features, integrations and usage limits depend on the selected subscription.
+    </p>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta" id="contact">
+  <div class="container">
+    <div class="cta-panel reveal">
+      <div class="eyebrow"><span class="dot"></span> LET'S BUILD THE FUTURE</div>
+      <h2>Your Restaurant's Next Chapter <span class="gradient-text">Starts Here.</span></h2>
+      <p>
+        Ready to make your restaurant smarter, faster and more connected?
+        Let's explore what LIVE DISH-AI can do for your business.
+      </p>
+      <button class="btn btn-primary" onclick="openModal()">Book Your Personal Demo ↗</button>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-about">
+        <a href="#home" class="logo">LIVE<span>DISH</span>-AI
+          <small>RESTAURANT TECHNOLOGY</small>
+        </a>
+        <p>
+          One platform for complete restaurant management.
+          Connecting customer experiences, intelligent operations
+          and AI-powered business growth.
+        </p>
+        <span style="font-size:10px;color:var(--gold)">✦ Technology for the next generation of restaurants.</span>
+      </div>
+
+      <div class="footer-col">
+        <h4>Explore</h4>
+        <a href="#products">Our Products</a>
+        <a href="#ecosystem">Our Platform</a>
+        <a href="#features">Features</a>
+        <a href="#pricing">Pricing</a>
+      </div>
+
+      <div class="footer-col">
+        <h4>Solutions</h4>
+        <a href="#products">AR Restaurant Menu</a>
+        <a href="#products">Online Ordering</a>
+        <a href="#products">Restaurant Operations</a>
+        <a href="#products">AI Automation</a>
+      </div>
+
+      <div class="footer-col">
+        <h4>Company</h4>
+        <a href="#contact">Contact Us</a>
+        <a href="#contact">Book a Demo</a>
+        <a href="#contact">Partnerships</a>
+        <a href="mailto:hello@livedish.ai">Email Us</a>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <span>© <span id="year"></span> LIVE DISH-AI. All rights reserved.</span>
+      <span>ONE PLATFORM. COMPLETE RESTAURANT MANAGEMENT.</span>
+    </div>
+  </div>
+</footer>
+
+<!-- DEMO MODAL -->
+<div class="modal" id="demoModal">
+  <div class="modal-box">
+    <button class="close-modal" onclick="closeModal()" aria-label="Close">×</button>
+    <div class="eyebrow"><span class="dot"></span> LET'S CONNECT</div>
+    <h2>Experience LIVE DISH-AI.</h2>
+    <p>Tell us about your restaurant. Our team can follow up to arrange a personalised product demonstration.</p>
+
+    <form id="demoForm">
+      <div class="form-field">
+        <label>YOUR NAME</label>
+        <input type="text" name="name" placeholder="Enter your name" required>
+      </div>
+      <div class="form-field">
+        <label>EMAIL ADDRESS</label>
+        <input type="email" name="email" placeholder="Enter your email" required>
+      </div>
+      <div class="form-field">
+        <label>RESTAURANT NAME</label>
+        <input type="text" name="restaurant" placeholder="Your restaurant name" required>
+      </div>
+      <div class="form-field">
+        <label>INTERESTED PRODUCT</label>
+        <select name="product" id="productSelect">
+          <option>Complete Restaurant Platform</option>
+          <option>LiveDish AI – 3D & AR Menu</option>
+          <option>Smart Ordering</option>
+          <option>TableBook AI</option>
+          <option>Restaurant Operations</option>
+          <option>AI Automation</option>
+          <option>Starter</option>
+          <option>Professional</option>
+          <option>Enterprise</option>
+        </select>
+      </div>
+      <button type="submit" class="btn btn-primary">Request a Demo ↗</button>
+    </form>
+  </div>
+</div>
+
+<script>
+// MOBILE NAVIGATION
+const menuToggle = document.getElementById('menuToggle');
+const navLinks = document.getElementById('navLinks');
+
+menuToggle.addEventListener('click', () => {
+  navLinks.classList.toggle('open');
+  menuToggle.textContent = navLinks.classList.contains('open') ? '×' : '☰';
+});
+
+navLinks.querySelectorAll('a').forEach(link => {
+  link.addEventListener('click', () => {
+    navLinks.classList.remove('open');
+    menuToggle.textContent = '☰';
+  });
+});
+
+// SCROLL REVEAL
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      observer.unobserve(entry.target);
+    }
+  });
+}, {threshold:0.12});
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// PRODUCT FILTER
+const filters = document.querySelectorAll('.filter');
+const productCards = document.querySelectorAll('.product-card');
+
+filters.forEach(button => {
+  button.addEventListener('click', () => {
+    filters.forEach(f => f.classList.remove('active'));
+    button.classList.add('active');
+
+    const category = button.dataset.filter;
+
+    productCards.forEach(card => {
+      card.hidden = category !== 'all' && card.dataset.category !== category;
+    });
+
+    document.querySelectorAll('.category-title').forEach(title => {
+      title.style.display = category === 'all' ? 'flex' : 'none';
+    });
+  });
+});
+
+// 3D TILT PRODUCT CARDS
+if (window.matchMedia('(hover:hover) and (pointer:fine)').matches) {
+  document.querySelectorAll('.product-card').forEach(card => {
+    card.addEventListener('mousemove', e => {
+      const rect = card.getBoundingClientRect();
+      const x = (e.clientX - rect.left) / rect.width;
+      const y = (e.clientY - rect.top) / rect.height;
+      card.style.transform =
+        `perspective(800px) rotateX(${(0.5-y)*7}deg) rotateY(${(x-0.5)*8}deg) translateY(-5px)`;
+    });
+    card.addEventListener('mouseleave', () => {
+      card.style.transform = '';
+    });
+  });
+}
+
+// HERO MOUSE PARALLAX
+const heroVisual = document.getElementById('heroVisual');
+const foodStage = document.getElementById('foodStage');
+
+if (window.matchMedia('(hover:hover) and (pointer:fine)').matches) {
+  heroVisual.addEventListener('mousemove', e => {
+    const rect = heroVisual.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width - .5;
+    const y = (e.clientY - rect.top) / rect.height - .5;
+    foodStage.style.transform =
+      `translateY(-8px) rotateY(${x*20}deg) rotateX(${-y*15}deg)`;
+  });
+  heroVisual.addEventListener('mouseleave', () => {
+    foodStage.style.transform = '';
+  });
+}
+
+// CURSOR LIGHT
+const cursorGlow = document.getElementById('cursorGlow');
+if (window.matchMedia('(hover:hover) and (pointer:fine)').matches) {
+  document.addEventListener('mousemove', e => {
+    cursorGlow.style.left = e.clientX + 'px';
+    cursorGlow.style.top = e.clientY + 'px';
+  });
+} else {
+  cursorGlow.style.display = 'none';
+}
+
+// PRICING MONTHLY / YEARLY
+document.querySelectorAll('[data-billing]').forEach(button => {
+  button.addEventListener('click', () => {
+    document.querySelectorAll('[data-billing]').forEach(b => b.classList.remove('active'));
+    button.classList.add('active');
+
+    const yearly = button.dataset.billing === 'yearly';
+
+    document.querySelectorAll('.price').forEach(price => {
+      const amount = yearly ? price.dataset.year : price.dataset.month;
+      price.innerHTML = '₹' + Number(amount).toLocaleString('en-IN') +
+        '<small>' + (yearly ? '/year' : '/month') + '</small>';
+    });
+  });
+});
+
+// DEMO MODAL
+const modal = document.getElementById('demoModal');
+
+function openModal(product) {
+  modal.classList.add('show');
+  document.body.style.overflow = 'hidden';
+  if(product) {
+    document.getElementById('productSelect').value = product;
+  }
+}
+
+function closeModal() {
+  modal.classList.remove('show');
+  document.body.style.overflow = '';
+}
+
+modal.addEventListener('click', e => {
+  if(e.target === modal) closeModal();
+});
+
+document.addEventListener('keydown', e => {
+  if(e.key === 'Escape') closeModal();
+});
+
+// DEMO FORM - FRONTEND PLACEHOLDER
+document.getElementById('demoForm').addEventListener('submit', e => {
+  e.preventDefault();
+  const form = new FormData(e.target);
+  const details = Object.fromEntries(form.entries());
+
+  const subject = encodeURIComponent('LIVE DISH-AI Demo Request');
+  const body = encodeURIComponent(
+    'Name: ' + details.name +
+    '\nEmail: ' + details.email +
+    '\nRestaurant: ' + details.restaurant +
+    '\nInterested Product: ' + details.product
+  );
+
+  // Opens the visitor's email application.
+  window.location.href =
+    'mailto:hello@livedish.ai?subject=' + subject + '&body=' + body;
+
+  alert('Your email application will open with your demo request. Please send the email to complete your enquiry.');
+});
+
+// FOOTER YEAR
+document.getElementById('year').textContent = new Date().getFullYear();
+</script>
+
+</body>
+</html>
