@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#07060a">
+<title>LiveDish AR Menu | 3D AI &amp; AR Menus for Restaurants</title>
+<meta name="description" content="Fly through the future of dining: AI-powered, WebAR 3D menus for restaurants.">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=Manrope:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--o:#ff6a2b;--g:#ffc27a;--v:#8b5cff;--w:#faf6ef;--m:#b9b0c4}
+*{box-sizing:border-box;margin:0;padding:0}
+html{background:#07060a}
+body{color:var(--w);font-family:'Manrope',system-ui,sans-serif;overflow-x:hidden;line-height:1.6}
+h1,h2,h3,.logo{font-family:'Bricolage Grotesque',sans-serif}
+a{color:inherit;text-decoration:none}button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--g);outline-offset:3px}
+#gl{position:fixed;inset:0;width:100%;height:100%;z-index:0;background:radial-gradient(ellipse at 50% 40%,#2a1238,#07060a 70%)}
+.glass{background:linear-gradient(135deg,rgba(255,255,255,.16),rgba(255,255,255,.04));border:1px solid rgba(255,255,255,.22);box-shadow:0 20px 60px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.35);backdrop-filter:blur(22px) saturate(160%);-webkit-backdrop-filter:blur(22px) saturate(160%)}
+@supports not (backdrop-filter:blur(1px)){.glass{background:rgba(30,20,40,.88)}}
+/* HUD */
+header{position:fixed;top:calc(12px + env(safe-area-inset-top));left:50%;transform:translateX(-50%);width:min(1100px,94%);z-index:50;border-radius:60px;padding:10px 12px 10px 24px;display:flex;align-items:center;justify-content:space-between}
+.logo{font-weight:800;font-size:20px;letter-spacing:-.03em}.logo b{color:var(--o)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 22px;border-radius:50px;border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.06);font-weight:700;font-size:14px;transition:transform .3s,box-shadow .3s}
+.btn:hover{transform:translateY(-2px) scale(1.03)}
+.btn.pri{background:linear-gradient(110deg,#ff9150,var(--o));color:#1a0c05;border:0;box-shadow:0 10px 34px rgba(255,106,43,.4)}
+.nl{display:flex;gap:22px;align-items:center;font-size:14px}.nl a:not(.btn){color:#e0d8ea;transition:color .3s}.nl a:not(.btn):hover{color:var(--g)}
+.dots{position:fixed;right:18px;top:50%;transform:translateY(-50%);z-index:50;display:flex;flex-direction:column;gap:12px}
+.dots button{width:10px;height:10px;border-radius:50%;border:1px solid rgba(255,255,255,.6);background:none;padding:0;transition:.3s}
+.dots button.on{background:var(--o);border-color:var(--o);box-shadow:0 0 14px var(--o);transform:scale(1.4)}
+.depth{position:fixed;left:20px;bottom:calc(18px + env(safe-area-inset-bottom));z-index:50;padding:8px 16px;border-radius:30px;font-size:12px;color:var(--g)}
+.hint{position:fixed;bottom:calc(18px + env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);z-index:50;font-size:12px;padding:8px 16px;border-radius:30px;color:var(--m);transition:opacity .5s}
+/* SECTIONS */
+main{position:relative;z-index:2}
+.s{height:100svh;min-height:560px;display:flex;align-items:center;padding:90px 6vw 60px}
+.s.r{justify-content:flex-end}
+.card{width:min(480px,100%);border-radius:28px;padding:clamp(24px,4vw,40px);transform:translateY(40px) scale(.94);opacity:0;transition:transform .9s cubic-bezier(.2,.8,.2,1),opacity .9s}
+.s.in .card{transform:none;opacity:1}
+.tag{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:700;color:var(--g);padding:6px 14px;border-radius:30px;background:rgba(255,106,43,.14);border:1px solid rgba(255,140,70,.35)}
+.tag:before{content:"";width:7px;height:7px;border-radius:50%;background:var(--o);box-shadow:0 0 12px var(--o)}
+.card h1,.card h2{font-size:clamp(34px,5.4vw,60px);line-height:1;letter-spacing:-.04em;margin:16px 0 14px}
+.card h2{font-size:clamp(30px,4.4vw,46px)}
+.grad{background:linear-gradient(100deg,#fff,var(--g) 45%,var(--o));-webkit-background-clip:text;background-clip:text;color:transparent}
+.card p{color:#d9d0e4;font-size:15px}
+.pills{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 4px}
+.pills span{font-size:12px;padding:6px 12px;border-radius:20px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18)}
+.pills span b{color:var(--g)}
+.acts{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}
+form label{display:block;font-size:12px;color:var(--m);margin:12px 0 5px}
+form input,form select{width:100%;padding:13px 14px;border-radius:12px;border:1px solid rgba(255,255,255,.25);background:rgba(0,0,0,.35);color:var(--w);font:16px 'Manrope';outline:none}
+form input:focus{border-color:var(--o)}form select option{color:#000}
+form .btn{width:100%;margin-top:16px}
+footer{position:absolute;bottom:calc(60px + env(safe-area-inset-bottom));left:0;right:0;text-align:center;font-size:12px;color:var(--m)}
+@media(max-width:800px){
+ .nl a:not(.btn){display:none}.dots{right:8px}
+ .s,.s.r{align-items:flex-end;justify-content:center;padding:80px 14px 70px}
+ .card{border-radius:24px;padding:22px}.depth{display:none}
+ .hint{bottom:calc(12px + env(safe-area-inset-bottom))}
+}
+@media(prefers-reduced-motion:reduce){.card{transition:none;opacity:1;transform:none}}
+</style>
+</head>
+<body>
+<canvas id="gl"></canvas>
+
+<header class="glass">
+ <a href="#s0" class="logo">LiveDish<b>AR</b></a>
+ <nav class="nl"><a href="#s1">Scan</a><a href="#s2">3D &amp; AR</a><a href="#s3">AI</a><a href="#s5">Demo</a><a href="#s5" class="btn pri">Book demo</a></nav>
+</header>
+<nav class="dots" id="dots" aria-label="Sections"></nav>
+<div class="depth glass" id="depth">DEPTH 00%</div>
+<div class="hint glass" id="hint">Scroll to fly through ↓</div>
+
+<main>
+ <section class="s" id="s0"><div class="card glass">
+  <span class="tag">AI + AR menu for restaurants</span>
+  <h1>Step inside <span class="grad">the menu.</span></h1>
+  <p>LiveDish turns every dish into a 3D model guests can place on their table with WebAR, while AI helps them choose what to order.</p>
+  <div class="pills"><span><b>AR</b> 3D dishes</span><span><b>AI</b> recommendations</span><span><b>Web</b> no app</span></div>
+  <div class="acts"><a href="#s1" class="btn pri">Start the tour</a><a href="#s5" class="btn">Book a demo</a></div>
+ </div></section>
+
+ <section class="s r" id="s1"><div class="card glass">
+  <span class="tag">WebAR · QR code</span>
+  <h2>Scan once. <span class="grad">Nothing to install.</span></h2>
+  <p>Guests point their camera at the table QR code. The AR menu opens in the phone’s browser, ready in seconds.</p>
+  <div class="pills"><span><b>AR</b> opens in browser</span><span><b>AI</b> picks the language</span></div>
+ </div></section>
+
+ <section class="s" id="s2"><div class="card glass">
+  <span class="tag">3D dish models · AR placement</span>
+  <h2>See the dish <span class="grad">before you order.</span></h2>
+  <p>Spin, zoom and place a life-size 3D dish on the table with augmented reality. Guests see portion size, ingredients and price.</p>
+  <div class="pills"><span><b>AR</b> life-size view</span><span><b>3D</b> rotate &amp; zoom</span><span><b>AI</b> dish details</span></div>
+ </div></section>
+
+ <section class="s r" id="s3"><div class="card glass">
+  <span class="tag">AI recommendation engine</span>
+  <h2>An AI waiter <span class="grad">in every pocket.</span></h2>
+  <p>Ask for “something spicy under ₹400” and the AI suggests dishes, then shows them in AR so the choice is easy.</p>
+  <div class="pills"><span><b>AI</b> taste &amp; budget</span><span><b>AI</b> chat assistant</span><span><b>AR</b> preview picks</span></div>
+ </div></section>
+
+ <section class="s" id="s4"><div class="card glass">
+  <span class="tag">AI translation · multi-language AR</span>
+  <h2>Every guest, <span class="grad">their own language.</span></h2>
+  <p>AI translates dish names, descriptions and allergens, so tourists and locals read the same AR menu in the language they prefer.</p>
+  <div class="pills"><span><b>AI</b> instant translation</span><span><b>AR</b> labels on dishes</span></div>
+ </div></section>
+
+ <section class="s r" id="s5"><div class="card glass">
+  <span class="tag">AI analytics · AR ordering</span>
+  <h2>Book your <span class="grad">AR menu demo.</span></h2>
+  <p>See which dishes get the most AR views and orders, powered by AI insights.</p>
+  <form id="form">
+   <label for="n">Your name</label><input id="n" name="name" required autocomplete="name">
+   <label for="e">Email</label><input id="e" name="email" type="email" required autocomplete="email">
+   <label for="r">Restaurant</label><input id="r" name="restaurant" required>
+   <button class="btn pri" type="submit">Request AR menu demo</button>
+  </form>
+ </div>
+ <footer>© <span id="yr"></span> LiveDish AI · AR &amp; AI menus for restaurants</footer>
+ </section>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+const N=6,GAP=18,U=id=>`https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=700&q=75`;
+/* replace these image URLs with your own dishes */
+const IMG={hero:'1569718212165-3a8278d5f624',burger:'1551782450-a2132b4ba21d',pizza:'1513104890138-7c749659a591',bowl:'1547592180-85f173990554'};
+const fine=matchMedia('(hover:hover) and (pointer:fine)').matches,still=matchMedia('(prefers-reduced-motion:reduce)').matches;
+const small=innerWidth<800;
+
+/* ---- page: dots, reveal, form ---- */
+const dots=document.getElementById('dots');
+for(let i=0;i<N;i++){const b=document.createElement('button');b.setAttribute('aria-label','Section '+(i+1));b.onclick=()=>document.getElementById('s'+i).scrollIntoView({behavior:'smooth'});dots.appendChild(b)}
+const io=new IntersectionObserver(es=>es.forEach(e=>{e.target.classList.toggle('in',e.isIntersecting);
+ if(e.isIntersecting){const i=+e.target.id.slice(1);[...dots.children].forEach((d,k)=>d.classList.toggle('on',k===i))}}),{threshold:.45});
+document.querySelectorAll('.s').forEach(s=>io.observe(s));
+document.getElementById('yr').textContent=new Date().getFullYear();
+document.getElementById('form').onsubmit=e=>{e.preventDefault();const d=Object.fromEntries(new FormData(e.target));
+ location.href='mailto:hello@livedish.ai?subject='+encodeURIComponent('AR Menu Demo Request')+'&body='+encodeURIComponent(`Name: ${d.name}\nEmail: ${d.email}\nRestaurant: ${d.restaurant}`)};
+
+/* ---- three.js ---- */
+const R=new THREE.WebGLRenderer({canvas:document.getElementById('gl'),antialias:true,alpha:true});
+R.setPixelRatio(Math.min(devicePixelRatio,2));
+const S=new THREE.Scene();S.fog=new THREE.FogExp2(0x07060a,.018);
+const C=new THREE.PerspectiveCamera(55,1,.1,300);
+const L=new THREE.TextureLoader();L.setCrossOrigin('anonymous');
+const side=i=>small?0:(i%2===0?3.1:-3.1);   /* object sits opposite the glass card */
+
+/* glass label plane: tech name + what it does */
+function label(tag,title,sub,w=4.2){
+ const k=document.createElement('canvas');k.width=640;k.height=230;const x=k.getContext('2d');
+ const g=x.createLinearGradient(0,0,640,230);g.addColorStop(0,'rgba(255,255,255,.28)');g.addColorStop(1,'rgba(255,255,255,.07)');
+ x.fillStyle=g;x.strokeStyle='rgba(255,255,255,.5)';x.lineWidth=3;x.beginPath();x.roundRect?x.roundRect(6,6,628,218,34):x.rect(6,6,628,218);x.fill();x.stroke();
+ x.fillStyle='#ff8a4b';x.font='700 26px sans-serif';x.fillText(tag,34,58);
+ x.fillStyle='#fff';x.font='800 40px sans-serif';x.fillText(title,34,114);
+ x.fillStyle='#d9cfe6';x.font='500 26px sans-serif';x.fillText(sub,34,166);
+ x.fillStyle='#ff6a2b';x.beginPath();x.arc(598,40,9,0,7);x.fill();
+ const m=new THREE.Mesh(new THREE.PlaneGeometry(w,w*230/640),new THREE.MeshBasicMaterial({map:new THREE.CanvasTexture(k),transparent:true,depthWrite:false}));return m}
+function plate(id,r){
+ const g=new THREE.Group(),m=new THREE.Mesh(new THREE.CircleGeometry(r,64),new THREE.MeshBasicMaterial({color:0x6b3a22,side:THREE.DoubleSide}));
+ L.load(U(id),t=>{m.material.map=t;m.material.color.set(0xffffff);m.material.needsUpdate=true});
+ const rim=new THREE.Mesh(new THREE.RingGeometry(r,r*1.06,64),new THREE.MeshBasicMaterial({color:0xffc27a,side:THREE.DoubleSide}));
+ const glow=new THREE.Mesh(new THREE.RingGeometry(r*1.2,r*1.24,64),new THREE.MeshBasicMaterial({color:0xff6a2b,transparent:true,opacity:.6,side:THREE.DoubleSide}));
+ g.add(m,rim,glow);g.userData.glow=glow;return g}
+function brackets(s){ /* AR corner brackets */
+ const g=new THREE.Group(),mt=new THREE.MeshBasicMaterial({color:0xffc27a});
+ [[-1,1],[1,1],[-1,-1],[1,-1]].forEach(([a,b])=>{
+  const h=new THREE.Mesh(new THREE.BoxGeometry(s*.35,.06,.06),mt),v=new THREE.Mesh(new THREE.BoxGeometry(.06,s*.35,.06),mt);
+  h.position.set(a*(s-s*.175),b*s,0);v.position.set(a*s,b*(s-s*.175),0);g.add(h,v)});return g}
+
+const A=[]; /* station animators */
+const sts=[
+ ()=>{const g=new THREE.Group(),p=plate(IMG.hero,1.7);g.add(p,brackets(2.3));
+  const t=new THREE.Mesh(new THREE.TorusGeometry(2.6,.02,12,120),new THREE.MeshBasicMaterial({color:0xff6a2b}));t.rotation.x=1.2;g.add(t);
+  const lb=label('AI + AR MENU','Dishes that come alive','3D · WebAR · AI ordering');lb.position.set(0,-2.7,.3);g.add(lb);
+  A.push(T=>{p.rotation.y=Math.sin(T)*.35;t.rotation.z=T;p.userData.glow.scale.setScalar(1+Math.sin(T*3)*.04)});return g},
+ ()=>{const g=new THREE.Group(),k=document.createElement('canvas');k.width=k.height=210;const x=k.getContext('2d');
+  x.fillStyle='#faf6ef';x.fillRect(0,0,210,210);x.fillStyle='#120a16';
+  for(let i=0;i<21;i++)for(let j=0;j<21;j++){const f=(i<7&&j<7)||(i>13&&j<7)||(i<7&&j>13);if(f?(i%6===0||j%6===0||(i%6>1&&i%6<5&&j%6>1&&j%6<5)||0)&&true:Math.sin(i*12.9+j*78.2)*43758%1>.5)x.fillRect(i*10,j*10,10,10)}
+  const q=new THREE.Mesh(new THREE.PlaneGeometry(3,3),new THREE.MeshBasicMaterial({map:new THREE.CanvasTexture(k)}));
+  const sc=new THREE.Mesh(new THREE.PlaneGeometry(3.4,.08),new THREE.MeshBasicMaterial({color:0xff6a2b}));
+  g.add(q,sc,brackets(2));const lb=label('WEBAR · QR CODE','Scan once, no app','AR menu opens in the browser');lb.position.set(0,-2.7,.3);g.add(lb);
+  A.push(T=>{sc.position.y=Math.sin(T*2.2)*1.5;g.rotation.y=Math.sin(T*.7)*.25});return g},
+ ()=>{const g=new THREE.Group(),p=plate(IMG.burger,1.9);g.add(p,brackets(2.5));
+  const lb=label('3D DISH · AR PLACEMENT','See it on your table','Life-size AR preview');lb.position.set(0,-2.9,.3);g.add(lb);
+  A.push(T=>{g.rotation.y=Math.sin(T*.8)*.6;g.rotation.x=Math.cos(T*.6)*.12});return g},
+ ()=>{const g=new THREE.Group(),core=new THREE.Mesh(new THREE.IcosahedronGeometry(1.5,1),new THREE.MeshBasicMaterial({color:0x8b5cff,wireframe:true}));
+  const in_=new THREE.Mesh(new THREE.SphereGeometry(.7,24,24),new THREE.MeshBasicMaterial({color:0xff6a2b}));g.add(core,in_);
+  const orb=new THREE.Group();for(let i=0;i<8;i++){const d=new THREE.Mesh(new THREE.SphereGeometry(.1,12,12),new THREE.MeshBasicMaterial({color:0xffc27a}));const a=i/8*6.28;d.position.set(Math.cos(a)*2.4,Math.sin(a*2)*.6,Math.sin(a)*2.4);orb.add(d)}g.add(orb);
+  const lb=label('AI ENGINE · AR PREVIEW','Your AI waiter','Picks dishes by taste & budget');lb.position.set(0,-2.9,.3);g.add(lb);
+  A.push(T=>{core.rotation.y=T*.5;core.rotation.x=T*.3;orb.rotation.y=-T*.8;in_.scale.setScalar(1+Math.sin(T*3)*.1)});return g},
+ ()=>{const g=new THREE.Group(),words=[['Hello','AI translates'],['नमस्ते','AR menu'],['こんにちは','Dish names'],['Bonjour','Allergens']];
+  words.forEach((w,i)=>{const l=label('AI TRANSLATION',w[0],w[1]+' in AR',3.4);l.position.set((i-1.5)*.9,(1.5-i)*.95,-i*.5);l.rotation.y=-.25;g.add(l)});
+  A.push(T=>{g.children.forEach((c,i)=>c.position.y=(1.5-i)*.95+Math.sin(T*1.5+i)*.12);g.rotation.y=Math.sin(T*.5)*.25});return g},
+ ()=>{const g=new THREE.Group(),k=new THREE.Mesh(new THREE.TorusKnotGeometry(1.3,.38,160,20),new THREE.MeshBasicMaterial({color:0xff6a2b,wireframe:true}));
+  const lb=label('AI ANALYTICS · AR DATA','Know what sells','AR views and orders, per dish');lb.position.set(0,-2.8,.3);g.add(k,lb);
+  A.push(T=>{k.rotation.x=T*.4;k.rotation.y=T*.6});return g}
+];
+sts.forEach((f,i)=>{const o=f();o.position.set(side(i),0,-i*GAP);S.add(o)});
+
+/* small floating AR/AI chips along the whole path */
+const chipT=['AR','AI','3D','WebAR','GenAI'].map(t=>{const k=document.createElement('canvas');k.width=256;k.height=110;const x=k.getContext('2d');
+ x.fillStyle='rgba(255,255,255,.2)';x.strokeStyle='rgba(255,255,255,.55)';x.lineWidth=3;x.beginPath();x.roundRect?x.roundRect(4,4,248,102,40):x.rect(4,4,248,102);x.fill();x.stroke();
+ x.fillStyle='#ffc27a';x.font='800 52px sans-serif';x.textAlign='center';x.fillText(t,128,74);return new THREE.CanvasTexture(k)});
+const chips=[];
+for(let i=0;i<(small?22:38);i++){const m=new THREE.Mesh(new THREE.PlaneGeometry(1.1,.47),new THREE.MeshBasicMaterial({map:chipT[i%5],transparent:true,depthWrite:false,side:THREE.DoubleSide}));
+ const a=Math.random()*6.28,r=3.5+Math.random()*6;m.position.set(Math.cos(a)*r,Math.sin(a)*r*.6,-Math.random()*(N-1)*GAP-4);m.userData={s:Math.random()*6,y:m.position.y};S.add(m);chips.push(m)}
+/* dust */
+const n=700,pa=new Float32Array(n*3);for(let i=0;i<n;i++){pa[i*3]=(Math.random()-.5)*40;pa[i*3+1]=(Math.random()-.5)*26;pa[i*3+2]=-Math.random()*(N*GAP)+10}
+const pg=new THREE.BufferGeometry();pg.setAttribute('position',new THREE.BufferAttribute(pa,3));
+S.add(new THREE.Points(pg,new THREE.PointsMaterial({color:0xffb27a,size:.07,transparent:true,opacity:.75})));
+
+function size(){R.setSize(innerWidth,innerHeight,false);C.aspect=innerWidth/innerHeight;C.updateProjectionMatrix()}
+size();addEventListener('resize',size);
+let mx=0,my=0,tx=0,ty=0,cz=7,T=0;
+addEventListener('pointermove',e=>{tx=e.clientX/innerWidth-.5;ty=e.clientY/innerHeight-.5});
+const dep=document.getElementById('depth'),hint=document.getElementById('hint');
+(function loop(){
+ requestAnimationFrame(loop);T+=.016;
+ const u=scrollY/innerHeight,target=7-u*GAP;
+ const v=target-cz;cz+=v*(still?1:.07);
+ C.fov=55+Math.min(Math.abs(v)*2.2,22);C.updateProjectionMatrix();   /* zoom-warp when scrolling fast */
+ mx+=(tx-mx)*.05;my+=(ty-my)*.05;
+ C.position.set(mx*(small?.6:1.6)+Math.sin(T*.4)*.15,-my*1+Math.cos(T*.3)*.1,cz);
+ C.lookAt(mx*.8,-my*.5,cz-10);C.rotation.z=v*.004;
+ A.forEach(f=>f(T));
+ chips.forEach(c=>{c.position.y=c.userData.y+Math.sin(T+c.userData.s)*.3;c.lookAt(C.position)});
+ R.render(S,C);
+ const p=Math.min(100,Math.round(u/(N-1)*100));dep.textContent='DEPTH '+String(p).padStart(2,'0')+'%';
+ hint.style.opacity=u>.3?0:1;
+})();
+</script>
+</body>
+</html>
