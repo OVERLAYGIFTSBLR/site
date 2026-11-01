@@ -1,454 +1,897 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#0a0907">
-<title>LIVE DISH-AI | Complete Restaurant Technology</title>
-<meta name="description" content="LIVE DISH-AI – One platform for complete restaurant management. 3D & AR menus, AI ordering, reservations, inventory and automation.">
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>LIVE DISH-AI</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="LIVE DISH-AI. One platform for complete restaurant management: 3D and AR menus, AI ordering, reservations, inventory and automation.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700;800&family=Manrope:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Instrument+Sans:wght@400;500;600;700&display=swap">
 <style>
-:root{--bg:#0a0907;--p:#15110e;--p2:#1d1712;--o:#ff6a2b;--g:#ffc27a;--w:#faf6ef;--m:#a39a8f;--l:rgba(255,255,255,.1)}
+/* Layout: fixed WebGL canvas behind the page. A 3D burger follows the hero stage, then
+   explodes layer by layer as the "peel" section scrolls. Everything after it sits on solid ground. */
+:root{
+  --ink:#0c0a08; --coal:#14100d; --ash:#1d1712;
+  --ember:#ff6a2b; --saffron:#ffb347; --cream:#f6efe4; --smoke:#a99f92;
+  --line:rgba(255,232,205,.11);
+  --display:'Bricolage Grotesque','Arial Narrow',system-ui,sans-serif;
+  --body:'Instrument Sans',system-ui,-apple-system,'Segoe UI',sans-serif;
+  color-scheme:dark;
+}
 *{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--w);font-family:'Manrope',system-ui,sans-serif;overflow-x:hidden;line-height:1.6}
-a{color:inherit;text-decoration:none}button{font:inherit;cursor:pointer;color:inherit}
-img{max-width:100%;display:block}
-:focus-visible{outline:2px solid var(--g);outline-offset:3px}
-.wrap{width:min(1180px,92%);margin:auto;position:relative;z-index:1}
-h1,h2,h3,h4,.logo{font-family:'Bricolage Grotesque',sans-serif}
-.grad{background:linear-gradient(100deg,#fff,var(--g) 45%,var(--o));-webkit-background-clip:text;background-clip:text;color:transparent}
-.tag{color:var(--g);font-size:12px;font-weight:700;letter-spacing:.06em;display:inline-flex;gap:8px;align-items:center}
-.tag:before{content:"";width:8px;height:8px;border-radius:50%;background:var(--o);box-shadow:0 0 14px var(--o)}
-section{padding:clamp(70px,10vw,120px) 0;position:relative}
-.sh{max-width:680px;margin-bottom:44px}
-.sh h2{font-size:clamp(32px,5.2vw,58px);line-height:1.05;letter-spacing:-.03em;margin:14px 0}
-.sh p{color:var(--m)}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:14px 24px;border-radius:50px;border:1px solid var(--l);font-weight:700;font-size:14px;transition:transform .3s,box-shadow .3s,border-color .3s;background:none}
-.btn:hover{transform:translateY(-3px);border-color:var(--o)}
-.btn.pri{background:linear-gradient(110deg,#ff9150,var(--o));color:#170d06;border:0;box-shadow:0 10px 34px rgba(255,106,43,.28)}
-#progress{position:fixed;top:0;left:0;height:3px;width:0;background:linear-gradient(90deg,var(--g),var(--o));z-index:300}
-.glow{position:fixed;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(255,106,43,.12),transparent 70%);transform:translate(-50%,-50%);pointer-events:none;z-index:0;left:50%;top:30%}
-/* NAV */
-header{position:fixed;inset:0 0 auto;z-index:100;padding-top:env(safe-area-inset-top);background:rgba(10,9,7,.7);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-bottom:1px solid var(--l)}
-.nav{height:72px;display:flex;align-items:center;justify-content:space-between}
-.logo{font-weight:800;font-size:22px;letter-spacing:-.04em}.logo b{color:var(--o)}
-.links{display:flex;gap:28px;align-items:center}
-.links a{font-size:14px;color:#d4cdc3;transition:color .3s}.links a:hover{color:var(--o)}
-.burger{display:none;background:none;border:0;font-size:28px;padding:6px 10px}
-/* HERO */
-.hero{min-height:100svh;padding:110px 0 60px;display:flex;align-items:center;overflow:hidden;background:radial-gradient(ellipse at 75% 45%,rgba(255,106,43,.16),transparent 55%)}
-.hg{display:grid;grid-template-columns:1fr 1.1fr;gap:20px;align-items:center}
-.hero h1{font-size:clamp(46px,7vw,92px);line-height:.95;letter-spacing:-.05em;margin:20px 0}
-.hero h1 span{display:block;overflow:hidden}
-.hero h1 span i{display:block;font-style:normal;transform:translateY(105%);animation:up 1s cubic-bezier(.2,.8,.2,1) forwards}
-.hero h1 span:nth-child(2) i{animation-delay:.15s}
-@keyframes up{to{transform:none}}
-.hero p.lead{color:var(--m);max-width:480px;font-size:17px}
-.acts{display:flex;gap:12px;flex-wrap:wrap;margin:30px 0}
-.stage{position:relative;height:min(640px,70vh);min-height:380px;touch-action:pan-y}
-#gl{position:absolute;inset:0;width:100%;height:100%}
-.chip{position:absolute;background:rgba(21,17,14,.82);border:1px solid var(--l);backdrop-filter:blur(14px);padding:10px 15px;border-radius:14px;font-size:12px;animation:bob 5s ease-in-out infinite;pointer-events:none}
-.chip b{display:block;font-size:13px}.chip small{color:var(--m)}
-.c1{top:8%;right:2%}.c2{bottom:10%;left:0;animation-delay:-2s}
-@keyframes bob{50%{transform:translateY(-12px)}}
-.scroll{position:absolute;bottom:18px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--m);letter-spacing:.2em}
-.scroll:after{content:"";display:block;width:1px;height:28px;margin:8px auto 0;background:linear-gradient(var(--o),transparent);animation:ln 2s infinite}
-@keyframes ln{0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}51%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
-/* MARQUEE */
-.mq{padding:30px 0;border-block:1px solid var(--l);overflow:hidden;background:var(--p)}
-.mt{display:flex;gap:18px;width:max-content;animation:mq 45s linear infinite}
-.mq:hover .mt{animation-play-state:paused}
-.mt img{width:220px;height:150px;object-fit:cover;border-radius:16px;transition:transform .4s}
-.mt img:nth-child(odd){transform:rotate(-2deg)}.mt img:nth-child(even){transform:rotate(2deg) translateY(8px)}
-.mt img:hover{transform:scale(1.08) rotate(0)}
-@keyframes mq{to{transform:translateX(-50%)}}
-/* PRODUCTS */
-.filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:28px}
-.f{background:none;border:1px solid var(--l);color:#bdb4a8;padding:10px 18px;border-radius:40px;font-size:13px;transition:.3s}
-.f.on,.f:hover{background:rgba(255,106,43,.14);border-color:var(--o);color:var(--g)}
-.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;perspective:1200px}
-.card{position:relative;padding:26px;border:1px solid var(--l);border-radius:20px;background:linear-gradient(150deg,var(--p2),var(--p));overflow:hidden;transition:transform .25s ease-out,border-color .3s;transform-style:preserve-3d;will-change:transform;min-height:210px}
-.card:before{content:"";position:absolute;inset:0;background:radial-gradient(260px circle at var(--x,50%) var(--y,0),rgba(255,140,70,.18),transparent 60%);opacity:0;transition:opacity .3s}
-.card:hover{border-color:rgba(255,140,70,.5)}.card:hover:before{opacity:1}
-.card.ft{grid-column:span 1;border-color:rgba(255,106,43,.45)}
-.ic{width:52px;height:52px;border-radius:14px;display:grid;place-items:center;font-size:25px;background:rgba(255,106,43,.14);transform:translateZ(40px);margin-bottom:18px}
-.card h4{font-size:20px;letter-spacing:-.02em;transform:translateZ(25px)}
-.card p{color:var(--m);font-size:14px;margin:8px 0 14px}
-.card em{font-style:normal;font-size:12px;color:var(--g);font-weight:700}
-.card[hidden]{display:none}
-/* AR SHOWCASE */
-.show{background:var(--p);overflow:hidden}
-.sg{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
-.sg h2{font-size:clamp(34px,5vw,58px);line-height:1.05;letter-spacing:-.03em;margin:16px 0}
-.sg p{color:var(--m)}
-.ul{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:26px 0;font-size:14px}
-.ul div:before{content:"✦ ";color:var(--o)}
-.phones{height:560px;display:grid;place-items:center;perspective:1400px}
-.phone{width:260px;height:520px;border-radius:40px;border:8px solid #2a231c;background:#000;position:relative;overflow:hidden;box-shadow:0 50px 90px rgba(0,0,0,.7),0 0 70px rgba(255,106,43,.22);transform:rotateY(calc(-22deg + var(--p,0)*44deg)) rotateX(calc(8deg - var(--p,0)*10deg));transition:transform .15s linear;transform-style:preserve-3d}
-.phone img{width:100%;height:100%;object-fit:cover;animation:zoom 9s ease-in-out infinite alternate}
-@keyframes zoom{to{transform:scale(1.18)}}
-.phone:before{content:"";position:absolute;top:10px;left:50%;width:80px;height:22px;background:#000;border-radius:20px;transform:translateX(-50%);z-index:3}
-.scan{position:absolute;left:0;right:0;height:3px;background:var(--o);box-shadow:0 0 25px 6px rgba(255,106,43,.6);animation:sc 3s ease-in-out infinite;z-index:2}
-@keyframes sc{0%,100%{top:12%}50%{top:82%}}
-.hot{position:absolute;z-index:3;background:rgba(10,9,7,.8);backdrop-filter:blur(8px);border:1px solid var(--l);border-radius:12px;padding:8px 12px;font-size:11px;transform:translateZ(60px)}
-.h1{left:14px;bottom:90px}.h2{right:14px;bottom:36px}
-/* ECO */
-.eco{text-align:center}
-.orb{position:relative;width:min(560px,100%);aspect-ratio:1;margin:0 auto}
-.core{position:absolute;inset:34%;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle,#4a2414,#1a110c);border:1px solid var(--o);box-shadow:0 0 70px rgba(255,106,43,.4);font-family:'Bricolage Grotesque';font-weight:800;font-size:clamp(13px,2.5vw,20px);line-height:1.1;z-index:2}
-.ring{position:absolute;inset:0;border:1px dashed rgba(255,194,122,.3);border-radius:50%;animation:spin 40s linear infinite}
-.ring.r2{inset:14%;animation-duration:28s;animation-direction:reverse;border-style:solid;border-color:rgba(255,255,255,.08)}
-.node{position:absolute;left:50%;top:50%;width:0;height:0;transform:rotate(var(--a)) translateY(calc(var(--r)*-1))}
-.node span{position:absolute;display:grid;place-items:center;width:clamp(58px,13vw,84px);aspect-ratio:1;margin:calc(clamp(58px,13vw,84px)/-2);border-radius:50%;background:var(--p2);border:1px solid var(--l);font-size:clamp(20px,4vw,28px);transform:rotate(calc(var(--a)*-1));transition:.3s;animation:cnt 40s linear infinite}
-.node span small{position:absolute;top:100%;margin-top:4px;font-size:10px;color:var(--m);white-space:nowrap}
-.node:hover span{border-color:var(--o);box-shadow:0 0 30px rgba(255,106,43,.4)}
-@keyframes spin{to{transform:rotate(360deg)}}
-.orb .spin{position:absolute;inset:0;animation:spin 40s linear infinite}
-@keyframes cnt{to{transform:rotate(calc(var(--a)*-1 - 360deg))}}
-/* BENEFITS */
-.bg{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-.ben{padding:28px;border-radius:20px;border:1px solid var(--l);background:var(--p)}
-.ben i{font-style:normal;font-size:28px;display:block;margin-bottom:16px}
-.ben h3{font-size:19px;margin-bottom:6px}.ben p{color:var(--m);font-size:14px}
-/* PRICING */
-.price{background:var(--p)}
-.bill{display:flex;gap:8px;margin-bottom:34px}
-.pg{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;align-items:stretch}
-.pc{border:1px solid var(--l);border-radius:22px;padding:32px;background:var(--bg);position:relative;display:flex;flex-direction:column}
-.pc.pop{border-color:var(--o);box-shadow:0 0 60px rgba(255,106,43,.14)}
-.pc .pl{position:absolute;top:-12px;right:22px;background:var(--o);color:#170d06;padding:5px 13px;border-radius:20px;font-size:11px;font-weight:800}
-.pc h3{font-size:24px}.pc .d{color:var(--m);font-size:13px;margin:6px 0 20px}
-.amt{font-family:'Bricolage Grotesque';font-size:44px;font-weight:800;letter-spacing:-.03em}.amt small{font-size:13px;color:var(--m);font-weight:500}
-.pc ul{list-style:none;margin:22px 0;flex:1}.pc li{padding:10px 0;border-bottom:1px solid rgba(255,255,255,.06);font-size:14px;color:#d4cdc3}
-.pc li:before{content:"✓";color:var(--o);margin-right:10px}
-.note{text-align:center;color:var(--m);font-size:12px;margin-top:22px}
-/* CTA */
-.cta{padding:0 0 100px}
-.cp{border-radius:30px;overflow:hidden;position:relative;text-align:center;padding:clamp(60px,9vw,110px) 24px;border:1px solid rgba(255,140,70,.4);background:linear-gradient(rgba(10,9,7,.78),rgba(10,9,7,.9)),url('https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=1400&q=70') center/cover}
-.cp h2{font-size:clamp(34px,6vw,70px);letter-spacing:-.04em;line-height:1;margin:16px 0}
-.cp p{color:#c9c1b6;max-width:520px;margin:0 auto 28px}
-/* FOOTER */
-footer{padding:60px 0 calc(24px + env(safe-area-inset-bottom));border-top:1px solid var(--l);background:#070605}
-.fg{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:36px}
-.fg p{color:var(--m);font-size:13px;max-width:300px;margin-top:14px}
-.fg h4{font-size:14px;margin-bottom:14px}.fg a{display:block;color:var(--m);font-size:13px;margin:9px 0;transition:.3s}.fg a:hover{color:var(--o)}
-.fb{border-top:1px solid var(--l);margin-top:40px;padding-top:20px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;color:#7d756b;font-size:12px}
-/* MODAL */
-.modal{position:fixed;inset:0;z-index:400;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(0,0,0,.75);backdrop-filter:blur(10px)}
-.modal.show{display:flex}
-.mb{background:var(--p2);border:1px solid var(--l);border-radius:22px;padding:30px;width:min(460px,100%);max-height:92svh;overflow:auto;position:relative;animation:pop .35s cubic-bezier(.2,.8,.2,1)}
-@keyframes pop{from{opacity:0;transform:translateY(24px) scale(.95)}}
-.mb h2{font-size:28px;margin:10px 0 6px}.mb>p{color:var(--m);font-size:14px;margin-bottom:18px}
-.x{position:absolute;right:16px;top:12px;background:none;border:0;font-size:28px}
-.mb label{display:block;font-size:12px;color:#bdb4a8;margin:12px 0 6px}
-.mb input,.mb select{width:100%;padding:13px;border-radius:10px;border:1px solid var(--l);background:var(--bg);color:var(--w);font:16px 'Manrope';outline:none}
-.mb input:focus,.mb select:focus{border-color:var(--o)}.mb .btn{width:100%;margin-top:18px}
-/* REVEAL */
-.rv{opacity:0;transform:translateY(34px) scale(.98);transition:opacity .9s,transform .9s cubic-bezier(.2,.8,.2,1)}
-.rv.in{opacity:1;transform:none}
-@media(max-width:900px){
- .links{display:none;position:absolute;top:100%;left:0;right:0;flex-direction:column;align-items:stretch;gap:0;background:var(--p);padding:12px 5%;border-bottom:1px solid var(--l)}
- .links.open{display:flex}.links a{padding:14px 0;border-bottom:1px solid var(--l)}.links .btn{margin-top:14px}
- .burger{display:block}
- .hg,.sg{grid-template-columns:1fr}.hero{padding-top:96px}.stage{height:420px;min-height:0}
- .grid,.bg,.pg{grid-template-columns:repeat(2,1fr)}.fg{grid-template-columns:1fr 1fr}.fg>div:first-child{grid-column:1/-1}
- .phones{height:520px}
-}
-@media(max-width:600px){
- .grid,.bg,.pg{grid-template-columns:1fr}.ul{grid-template-columns:1fr}.mt img{width:170px;height:120px}
- .stage{height:360px}.c2{display:none}.card{min-height:0}.scroll{display:none}
-}
-@media(prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}.rv{opacity:1;transform:none}.hero h1 span i{transform:none}}
-</style>
-</head>
-<body>
-<div id="progress"></div><div class="glow" id="glow"></div>
+html{scroll-behavior:smooth;background:var(--ink)}
+body{background:var(--ink);color:var(--cream);font:400 16px/1.6 var(--body);overflow-x:clip;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;cursor:pointer}
+::selection{background:var(--ember);color:#150c07}
+:focus-visible{outline:2px solid var(--saffron);outline-offset:3px;border-radius:6px}
+.wrap{width:100%;max-width:1240px;margin-inline:auto;padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px))}
+h1,h2,h3,h4{font-family:var(--display);font-weight:700;letter-spacing:-.03em;line-height:1.02;text-wrap:balance}
+.grad{background:linear-gradient(100deg,var(--saffron),var(--ember) 70%);-webkit-background-clip:text;background-clip:text;color:transparent}
 
-<header>
- <div class="wrap nav">
-  <a href="#home" class="logo">LIVE<b>DISH</b>-AI</a>
-  <nav class="links" id="links">
-   <a href="#products">Products</a><a href="#showcase">3D &amp; AR</a><a href="#platform">Platform</a><a href="#pricing">Pricing</a><a href="#contact">Contact</a>
-   <button class="btn pri" onclick="openM()">Book a demo</button>
-  </nav>
-  <button class="burger" id="burger" aria-label="Toggle menu" aria-expanded="false">☰</button>
- </div>
+#gl{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+.glow{position:fixed;left:0;top:0;width:420px;height:420px;margin:-210px 0 0 -210px;border-radius:50%;background:radial-gradient(circle,rgba(255,106,43,.10),transparent 68%);pointer-events:none;z-index:0;will-change:transform}
+main>section,footer{position:relative;z-index:1}
+
+/* PHOTO SLOTS: swap URLs in the IMAGES object at the bottom of this file */
+.ph{position:relative;overflow:hidden;background:
+  radial-gradient(circle at 50% 56%,hsl(var(--h,24) 62% 36%) 0 20%,hsl(var(--h,24) 45% 22%) 21% 34%,transparent 35%),
+  linear-gradient(160deg,hsl(var(--h,24) 38% 17%),#100c09)}
+.ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .7s,transform .9s cubic-bezier(.2,.7,.2,1)}
+.ph.ok img{opacity:1}
+
+/* HEADER */
+header{position:fixed;inset:0 0 auto 0;z-index:100;padding-top:env(safe-area-inset-top,0px);border-bottom:1px solid transparent;transition:background .3s,border-color .3s}
+header.solid{background:rgba(12,10,8,.8);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);border-color:var(--line)}
+.nav{height:68px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.logo{font-family:var(--display);font-weight:800;font-size:22px;letter-spacing:-.04em;line-height:1;position:relative;z-index:2}
+.logo b{color:var(--ember);font-weight:800}
+.logo small{display:block;font:600 8px/1 var(--body);letter-spacing:.3em;color:var(--smoke);margin-top:5px}
+.nav-links{display:flex;align-items:center;gap:30px}
+.nav-links a{font-size:14px;color:#cfc6b9;transition:color .25s}
+.nav-links a:hover{color:var(--ember)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:46px;padding:12px 24px;border-radius:999px;border:1px solid transparent;font-weight:600;font-size:14px;transition:transform .25s,box-shadow .25s,border-color .25s,color .25s}
+.btn-primary{background:linear-gradient(110deg,#ff9150,var(--ember));color:#1a0d06;box-shadow:0 10px 34px rgba(255,106,43,.25)}
+.btn-primary:hover{transform:translateY(-3px);box-shadow:0 16px 42px rgba(255,106,43,.38)}
+.btn-ghost{border-color:var(--line);background:rgba(255,235,210,.05)}
+.btn-ghost:hover{border-color:var(--ember);color:var(--saffron)}
+.menu-toggle{display:none;position:relative;z-index:2;width:46px;height:46px;border-radius:50%;border:1px solid var(--line);background:rgba(255,235,210,.05)}
+.menu-toggle span{position:absolute;left:14px;right:14px;height:2px;background:var(--cream);border-radius:2px;transition:transform .3s,top .3s,opacity .3s}
+.menu-toggle span:nth-child(1){top:18px}.menu-toggle span:nth-child(2){top:25px}
+.menu-toggle[aria-expanded="true"] span:nth-child(1){top:21px;transform:rotate(45deg)}
+.menu-toggle[aria-expanded="true"] span:nth-child(2){top:21px;transform:rotate(-45deg)}
+
+/* HERO */
+.hero{padding-top:calc(86px + env(safe-area-inset-top,0px));padding-bottom:64px;min-height:min(100svh,880px);display:flex;align-items:center}
+.hero-grid{width:100%;display:grid;grid-template-columns:1.05fr .95fr;gap:24px;align-items:center}
+.kicker{display:inline-flex;align-items:center;gap:10px;font-size:13px;font-weight:600;color:var(--saffron)}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--ember);box-shadow:0 0 14px var(--ember);animation:pulse 2s infinite}
+@keyframes pulse{50%{box-shadow:0 0 0 9px rgba(255,106,43,0)}}
+.hero h1{font-size:clamp(48px,5.3vw,86px);font-weight:800;line-height:.93;letter-spacing:-.045em;margin:22px 0 24px}
+.ln{display:block;overflow:hidden;padding-bottom:.1em;margin-bottom:-.1em}
+.ln>span{display:block;animation:rise 1.1s cubic-bezier(.2,.8,.2,1) both}
+.ln:nth-child(2)>span{animation-delay:.12s}
+@keyframes rise{from{transform:translateY(105%)}}
+.hero p.lead{max-width:30em;color:#c2b8aa;font-size:17px}
+.hero-actions{display:flex;flex-wrap:wrap;gap:12px;margin:30px 0 26px}
+.hero-note{font-size:13px;color:var(--smoke);display:flex;flex-wrap:wrap;gap:6px 18px}
+.hero-note i{font-style:normal;color:var(--saffron)}
+.hero-stage{position:relative;height:min(64vh,580px);touch-action:pan-y;cursor:grab}
+.hero-stage.drag,.peel-stage.drag{cursor:grabbing}
+.chip{position:absolute;z-index:2;pointer-events:none;padding:12px 16px;border-radius:14px;background:rgba(24,19,15,.82);border:1px solid var(--line);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);box-shadow:0 20px 50px rgba(0,0,0,.45);animation:bob 6s ease-in-out infinite}
+.chip strong{display:block;font-family:var(--display);font-size:15px;letter-spacing:-.02em}
+.chip small{font-size:12px;color:var(--smoke)}
+.chip.a{top:6%;right:0}.chip.b{bottom:12%;left:-2%;animation-delay:-2s}.chip.c{bottom:2%;right:4%;animation-delay:-4s}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+.hint{position:absolute;left:50%;bottom:0;transform:translateX(-50%);display:flex;align-items:center;gap:8px;font-size:12px;color:var(--smoke);padding:8px 14px;border-radius:999px;border:1px solid var(--line);background:rgba(12,10,8,.55);pointer-events:none;transition:opacity .5s}
+.hint.gone{opacity:0}
+.no-gl .hero-stage .ph.fb,.no-gl .peel-stage .ph.fb{display:block}
+.ph.fb{display:none;position:absolute;inset:8% 10%;border-radius:50%;border:10px solid #2a221b;box-shadow:0 30px 90px #000,0 0 60px rgba(255,106,43,.2)}
+
+/* REEL */
+.reel{background:var(--ink);border-block:1px solid var(--line);padding-block:clamp(44px,6vw,84px);overflow:hidden}
+.reel-head{display:flex;flex-wrap:wrap;align-items:end;justify-content:space-between;gap:12px 40px;margin-bottom:32px}
+.reel-head h2{font-size:clamp(26px,3.4vw,40px);max-width:16em}
+.reel-head p{color:var(--smoke);max-width:26em;font-size:15px}
+.reel-track{display:flex;gap:16px;width:max-content;padding-right:16px;animation:slide 70s linear infinite}
+.reel:hover .reel-track{animation-play-state:paused}
+@keyframes slide{to{transform:translateX(-50%)}}
+.shot{flex:none;width:clamp(170px,21vw,270px);aspect-ratio:3/4;border-radius:20px}
+.shot:nth-child(even){margin-top:34px}
+.shot span{position:absolute;left:12px;bottom:12px;z-index:1;font-size:12px;font-weight:600;padding:6px 12px;border-radius:999px;background:rgba(12,10,8,.7);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+
+/* PEEL */
+.peel{height:380vh}
+.peel-stick{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden}
+.peel-grid{height:100%;display:grid;grid-template-columns:.85fr 1.15fr;align-items:center;padding-top:calc(60px + env(safe-area-inset-top,0px))}
+.peel-copy h2{font-size:clamp(36px,4.6vw,64px);font-weight:800;letter-spacing:-.04em;margin:16px 0 18px}
+.peel-copy p{color:#c2b8aa;max-width:27em}
+.meter-row{display:flex;align-items:center;gap:14px;margin:28px 0 24px;font-size:13px;color:var(--smoke)}
+.meter{flex:0 0 clamp(90px,14vw,160px);height:4px;border-radius:4px;background:var(--line);overflow:hidden}
+.meter b{display:block;height:100%;width:calc(var(--p,0)*100%);background:linear-gradient(90deg,var(--saffron),var(--ember))}
+#stageText{color:var(--cream);font-weight:600}
+.peel-stage{height:88%;position:relative;touch-action:pan-y;cursor:grab}
+.tags{position:absolute;inset:0;pointer-events:none;z-index:2}
+.tag{position:absolute;left:0;top:0;opacity:0;transition:opacity .5s;will-change:transform}
+.tag .in{position:absolute;top:0;display:flex;align-items:center;gap:8px;width:max-content;transform:translateY(-50%);line-height:1.25}
+.tag.r .in{left:0}
+.tag.l .in{right:0;flex-direction:row-reverse;text-align:right}
+.tag i{display:block;width:22px;height:1px;background:var(--ember);position:relative}
+.tag i:after{content:"";position:absolute;top:-3px;left:-3px;width:7px;height:7px;border-radius:50%;background:var(--ember);box-shadow:0 0 12px var(--ember)}
+.tag.l i:after{left:auto;right:-3px}
+.tag b{display:block;font:700 14px var(--display);letter-spacing:-.01em}
+.tag small{display:block;font-size:11.5px;color:var(--smoke)}
+
+/* AR FEATURES */
+.features{background:var(--coal);padding-block:clamp(70px,9vw,120px)}
+.sec-head{max-width:720px;margin-bottom:46px}
+.sec-head h2{font-size:clamp(34px,4.8vw,60px);font-weight:800;letter-spacing:-.04em;margin:16px 0 16px}
+.sec-head p{color:var(--smoke);max-width:36em}
+.feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:22px;overflow:hidden}
+.feat{background:var(--coal);padding:28px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.feat h3{font-size:21px}
+.feat p{color:var(--smoke);font-size:14.5px}
+.feat .gl{font-size:12px;color:var(--ember);font-weight:700}
+
+/* PRODUCTS */
+.products{background:var(--ink);padding-block:clamp(72px,10vw,130px)}
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
+.filter{padding:10px 18px;min-height:42px;border-radius:999px;border:1px solid var(--line);background:rgba(255,235,210,.04);font-size:14px;color:#cfc6b9;transition:.25s}
+.filter:hover,.filter.active{background:rgba(255,106,43,.14);border-color:rgba(255,106,43,.5);color:var(--saffron)}
+.cat-title{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:6px 20px;margin:48px 0 20px;padding-bottom:14px;border-bottom:1px solid var(--line)}
+.cat-title h3{font-size:24px}
+.cat-title span{font-size:13px;color:var(--smoke)}
+.pgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.pcard{position:relative;min-width:0;min-height:250px;padding:24px;border-radius:20px;border:1px solid var(--line);background:linear-gradient(150deg,var(--ash),var(--coal));overflow:hidden;display:flex;flex-direction:column;transition:border-color .3s,box-shadow .3s,transform .25s ease-out;transform-style:preserve-3d}
+.pcard:hover{border-color:rgba(255,140,80,.5);box-shadow:0 24px 60px rgba(0,0,0,.5)}
+.pcard:before{content:"";position:absolute;right:-70px;top:-80px;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(255,106,43,.22),transparent 65%);opacity:.6;transition:opacity .3s}
+.pcard:hover:before{opacity:1}
+.ptop{display:flex;align-items:center;justify-content:space-between;transform:translateZ(30px)}
+.pico{width:50px;height:50px;border-radius:14px;display:grid;place-items:center;font-size:24px;background:rgba(255,106,43,.12);border:1px solid rgba(255,106,43,.25)}
+.pnum{font:600 12px var(--body);color:#6f665b;font-variant-numeric:tabular-nums}
+.pcard h4{font-size:22px;margin:26px 0 8px;transform:translateZ(22px)}
+.pcard p{font-size:14.5px;color:var(--smoke);flex:1}
+.pbot{display:flex;align-items:center;justify-content:space-between;margin-top:20px;gap:10px}
+.ptag{font-size:12px;font-weight:600;color:var(--saffron)}
+.parr{flex:none;width:32px;height:32px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;color:var(--ember);transition:.3s}
+.pcard:hover .parr{background:var(--ember);color:#1a0d06;transform:rotate(45deg)}
+
+/* GALLERY */
+.gallery{background:var(--coal);padding-block:clamp(72px,10vw,130px)}
+.bento{display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:clamp(150px,17vw,210px);grid-auto-flow:dense;gap:14px}
+.tile{position:relative;border-radius:22px;min-width:0;transition:transform .25s ease-out;transform-style:preserve-3d;box-shadow:0 20px 50px rgba(0,0,0,.35)}
+.tile .ph{position:absolute;inset:0;border-radius:inherit}
+.tile:after{content:"";position:absolute;inset:0;border-radius:inherit;background:linear-gradient(transparent 55%,rgba(8,6,4,.78));pointer-events:none}
+.tile:hover .ph img{transform:scale(1.07)}
+.cap{position:absolute;left:16px;right:16px;bottom:14px;z-index:2;display:flex;align-items:flex-end;justify-content:space-between;gap:10px;transform:translateZ(40px)}
+.cap strong{font:700 17px/1.1 var(--display);letter-spacing:-.02em}
+.cap em{font-style:normal;font-size:11px;font-weight:700;color:#1a0d06;background:var(--saffron);padding:4px 10px;border-radius:999px;white-space:nowrap}
+.t-a{grid-column:span 2;grid-row:span 2}.t-c{grid-row:span 2}.t-e{grid-column:span 2}
+
+/* ECOSYSTEM RING */
+.eco{background:radial-gradient(ellipse at 50% 40%,#2a1a10,var(--ink) 66%);padding-block:clamp(72px,10vw,130px);overflow:hidden}
+.ring-wrap{--R:310px;--nw:158px;--nh:78px;position:relative;height:clamp(360px,50vw,470px);perspective:1300px;touch-action:pan-y;cursor:grab;margin-top:8px}
+.ring{position:absolute;left:50%;top:50%;width:0;height:0;transform-style:preserve-3d;transform:rotateX(-12deg)}
+.node{position:absolute;left:calc(var(--nw)/-2);top:calc(var(--nh)/-2);width:var(--nw);height:var(--nh);display:flex;align-items:center;gap:10px;padding:0 14px;border-radius:16px;background:rgba(29,23,18,.9);border:1px solid rgba(255,232,205,.16);font-size:13.5px;font-weight:600;line-height:1.2;box-shadow:0 16px 40px rgba(0,0,0,.5);will-change:transform,opacity}
+.node span{font-size:24px;flex:none}
+.core{position:absolute;left:-95px;top:-62px;width:190px;height:124px;display:grid;place-content:center;text-align:center;border-radius:22px;border:1px solid rgba(255,138,74,.55);background:linear-gradient(150deg,#3b2316,#1a130e);box-shadow:0 0 90px rgba(255,106,43,.3),inset 0 0 30px rgba(255,106,43,.12)}
+.core strong{font:800 21px var(--display);letter-spacing:-.04em}
+.core small{font-size:10px;letter-spacing:.16em;color:var(--saffron);font-weight:600;margin-top:6px}
+
+/* BENEFITS */
+.benefits{background:var(--ink);padding-block:clamp(72px,10vw,130px)}
+.bgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.ben{padding:28px;border-radius:20px;border:1px solid var(--line);background:linear-gradient(150deg,var(--ash),var(--coal));transition:transform .25s ease-out,border-color .3s;min-width:0}
+.ben:hover{border-color:rgba(255,140,80,.45)}
+.ben .ico{font-size:28px;margin-bottom:22px;transform:translateZ(30px)}
+.ben h3{font-size:20px;margin-bottom:8px}
+.ben p{font-size:14.5px;color:var(--smoke)}
+
+/* PRICING */
+.pricing{background:var(--coal);padding-block:clamp(72px,10vw,130px)}
+.pricing .sec-head{margin-inline:auto;text-align:center}
+.pricing .sec-head p{margin-inline:auto}
+.billing{display:flex;justify-content:center;gap:8px;margin-bottom:38px;flex-wrap:wrap}
+.billing button{padding:10px 20px;min-height:42px;border-radius:999px;border:1px solid var(--line);background:none;color:#cfc6b9;font-size:14px;transition:.25s}
+.billing button.active{background:rgba(255,106,43,.14);border-color:var(--ember);color:var(--saffron)}
+.plans{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;align-items:stretch}
+.plan{position:relative;display:flex;flex-direction:column;padding:32px;border-radius:22px;border:1px solid var(--line);background:var(--ink);min-width:0}
+.plan.pop{border-color:var(--ember);box-shadow:0 0 70px rgba(255,106,43,.14);background:linear-gradient(170deg,#241710,var(--ink) 60%)}
+.pop-l{position:absolute;top:-13px;right:22px;padding:5px 13px;border-radius:999px;background:var(--ember);color:#1a0d06;font-size:11px;font-weight:700}
+.plan h3{font-size:26px}
+.plan .d{color:var(--smoke);font-size:14px;margin:8px 0 24px}
+.price{font:700 44px var(--display);letter-spacing:-.04em;font-variant-numeric:tabular-nums}
+.price small{font:400 13px var(--body);letter-spacing:0;color:var(--smoke)}
+.plan ul{list-style:none;margin:24px 0 28px;flex:1}
+.plan li{font-size:14.5px;color:#d8cfc2;padding:10px 0;border-bottom:1px solid var(--line);display:flex;gap:10px}
+.plan li:before{content:"✓";color:var(--ember);font-weight:700}
+.plan .btn{width:100%}
+.fine{text-align:center;color:var(--smoke);font-size:12px;margin-top:24px}
+
+/* CTA */
+.cta{background:var(--ink);padding-block:clamp(60px,9vw,120px)}
+.cta-panel{position:relative;border-radius:28px;overflow:hidden;padding:clamp(48px,9vw,110px) 24px;text-align:center;border:1px solid rgba(255,140,80,.3);isolation:isolate}
+.cta-panel .ph{position:absolute;inset:0;z-index:-2}
+.cta-panel:before{content:"";position:absolute;inset:0;z-index:-1;background:radial-gradient(ellipse at 50% 110%,rgba(120,50,22,.78),rgba(14,10,7,.88) 60%),rgba(12,9,6,.5)}
+.cta-panel h2{font-size:clamp(36px,5.6vw,72px);font-weight:800;letter-spacing:-.045em;margin:16px auto;max-width:12em}
+.cta-panel p{color:#d2c8b9;max-width:34em;margin:0 auto 28px}
+
+/* FOOTER */
+footer{background:#080605;border-top:1px solid var(--line);padding-top:60px;padding-bottom:calc(24px + env(safe-area-inset-bottom,0px))}
+.fgrid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:36px}
+.fabout p{color:var(--smoke);font-size:14px;max-width:24em;margin:16px 0}
+.fcol h4{font-size:14px;margin-bottom:16px;letter-spacing:-.01em}
+.fcol a{display:block;font-size:14px;color:var(--smoke);padding:6px 0;transition:color .25s}
+.fcol a:hover{color:var(--ember)}
+.fbot{border-top:1px solid var(--line);margin-top:44px;padding-top:22px;display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px;font-size:12px;color:#7f766a}
+
+/* MODAL */
+.modal{position:fixed;inset:0;z-index:200;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(0,0,0,.72);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+.modal.show{display:flex}
+.mbox{position:relative;width:min(480px,100%);max-height:100%;overflow:auto;padding:32px;border-radius:24px;background:var(--ash);border:1px solid rgba(255,232,205,.18)}
+.mbox h2{font-size:30px;margin:12px 0 8px}
+.mbox p{font-size:14px;color:var(--smoke);margin-bottom:20px}
+.x{position:absolute;right:16px;top:16px;width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:none;font-size:22px;line-height:1}
+.field{margin:12px 0}
+.field label{display:block;font-size:12.5px;font-weight:600;color:#d2c8b9;margin-bottom:6px}
+.field input,.field select{width:100%;min-height:48px;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:var(--ink);color:var(--cream);font:16px var(--body);outline:none}
+.field input:focus,.field select:focus{border-color:var(--ember)}
+.mbox .btn{width:100%;margin-top:12px}
+.sent{display:none}
+.mbox.done form{display:none}.mbox.done .sent{display:block}
+.mailline{display:flex;gap:8px;align-items:center;margin:14px 0;padding:12px 14px;border-radius:12px;background:var(--ink);border:1px solid var(--line);font-size:14px;word-break:break-all}
+.mailline button{margin-left:auto;flex:none;padding:6px 14px;border-radius:999px;border:1px solid var(--line);background:none;font-size:12px}
+
+.js .rv{opacity:0;transform:translateY(28px);transition:opacity .8s,transform .8s cubic-bezier(.2,.7,.2,1)}
+.js .rv.in{opacity:1;transform:none}
+
+@media (max-width:980px){
+  .menu-toggle{display:block}
+  .nav .desk{display:none}
+  .nav-links{position:fixed;inset:0;flex-direction:column;align-items:flex-start;justify-content:center;gap:6px;padding:90px max(28px,env(safe-area-inset-left,0px)) 40px;background:rgba(12,10,8,.97);opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s}
+  .nav-links.open{opacity:1;visibility:visible}
+  .nav-links a{font:700 38px var(--display);letter-spacing:-.04em;color:var(--cream);padding:6px 0}
+  .hero{align-items:flex-start}
+  .hero-grid{grid-template-columns:1fr;gap:0}
+  .hero-stage{order:-1;height:min(42vh,360px)}
+  .hero h1{font-size:clamp(40px,11vw,76px);margin-top:16px}
+  .chip.c{display:none}
+  .peel-grid{grid-template-columns:1fr;grid-template-rows:minmax(0,1fr) auto;padding-top:calc(64px + env(safe-area-inset-top,0px));padding-bottom:calc(18px + env(safe-area-inset-bottom,0px))}
+  .peel-stage{order:-1;height:100%}
+  .peel-copy h2{font-size:clamp(30px,8vw,44px);margin:8px 0 10px}
+  .peel-copy p{font-size:14.5px}
+  .meter-row{margin:14px 0 14px}
+  .feat-grid,.bgrid,.plans{grid-template-columns:1fr}
+  .feat-grid{border-radius:18px}
+  .pgrid{grid-template-columns:repeat(2,1fr)}
+  .bento{grid-template-columns:repeat(2,1fr);grid-auto-rows:150px}
+  .fgrid{grid-template-columns:1fr 1fr}.fabout{grid-column:1/-1}
+  .ring-wrap{--R:150px;--nw:112px;--nh:62px}
+  .node{font-size:12px;gap:7px;padding:0 10px}.node span{font-size:20px}
+  .core{left:-70px;top:-46px;width:140px;height:92px}.core strong{font-size:16px}.core small{font-size:8px}
+}
+@media (max-width:620px){
+  .pgrid{grid-template-columns:1fr}
+  .pcard{min-height:0}
+  .hero p.lead{font-size:16px}
+  .hero-actions .btn{flex:1 1 100%}
+  .tag small{display:none}
+  .tag b{font-size:12.5px}
+  .tag i{width:12px}
+  .chip{padding:9px 12px}.chip strong{font-size:13px}.chip small{font-size:11px}
+  .peel-copy .btn{width:100%}
+  .peel{height:340vh}
+  .fbot{flex-direction:column}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*:before,*:after{animation:none!important;transition:none!important}
+  .reel-track{transform:none}
+  html{scroll-behavior:auto}
+}
+</style>
+
+<canvas id="gl" aria-hidden="true"></canvas>
+<div class="glow" id="glow"></div>
+
+<header id="top">
+  <div class="wrap nav">
+    <a href="#home" class="logo" aria-label="LIVE DISH-AI home">LIVE<b>DISH</b>-AI<small>RESTAURANT TECHNOLOGY</small></a>
+    <nav class="nav-links" id="navLinks" aria-label="Main">
+      <a href="#home">Home</a>
+      <a href="#peel">3D Menu</a>
+      <a href="#products">Products</a>
+      <a href="#platform">Platform</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <button class="btn btn-primary desk" data-demo>Book a Demo</button>
+    <button class="menu-toggle" id="menuToggle" aria-label="Open navigation" aria-expanded="false"><span></span><span></span></button>
+  </div>
 </header>
 
+<main>
+<!-- HERO -->
 <section class="hero" id="home">
- <div class="wrap hg">
-  <div>
-   <div class="tag">Restaurant technology, rebuilt in 3D</div>
-   <h1><span><i>Your menu,</i></span><span><i class="grad">now alive.</i></span></h1>
-   <p class="lead">Show dishes in 3D and AR, take orders, manage tables, stock and staff — all from one connected platform.</p>
-   <div class="acts"><a href="#products" class="btn pri">Explore products</a><button class="btn" onclick="openM()">Book a demo ▶</button></div>
-   <p style="font-size:13px;color:var(--m)">Drag or tilt the plates → they follow you.</p>
+  <div class="wrap hero-grid">
+    <div class="hero-copy">
+      <div class="kicker"><span class="dot"></span> The future of restaurant technology</div>
+      <h1><span class="ln"><span>Your restaurant.</span></span><span class="ln"><span class="grad">Reimagined.</span></span></h1>
+      <p class="lead">One intelligent platform to change how restaurants serve guests, run the kitchen and grow. 3D menus, AR tables and AI that works the floor with you.</p>
+      <div class="hero-actions">
+        <a href="#products" class="btn btn-primary">Explore the ecosystem</a>
+        <button class="btn btn-ghost" data-demo>Schedule a demo</button>
+      </div>
+      <div class="hero-note"><span><i>✦</i> Customer experience</span><span><i>✦</i> Restaurant operations</span><span><i>✦</i> AI automation</span></div>
+    </div>
+    <div class="hero-stage" id="heroStage">
+      <div class="ph fb" data-img="burger" data-alt="Burger" style="--h:24"></div>
+      <div class="chip a"><strong>AI powered</strong><small>Smarter restaurant operations</small></div>
+      <div class="chip b"><strong>3D + AR experience</strong><small>See it before you order</small></div>
+      <div class="chip c"><strong>One platform</strong><small>Complete restaurant control</small></div>
+      <div class="hint" id="hint">Drag to spin the burger</div>
+    </div>
   </div>
-  <div class="stage" id="stage">
-   <canvas id="gl"></canvas>
-   <div class="chip c1"><b>✦ AI powered</b><small>Smarter operations</small></div>
-   <div class="chip c2"><b>◎ 3D + AR</b><small>See it before you order</small></div>
-  </div>
- </div>
- <div class="scroll">SCROLL</div>
 </section>
 
-<div class="mq" aria-hidden="true"><div class="mt" id="mt"></div></div>
-
-<section id="products">
- <div class="wrap">
-  <div class="sh rv"><div class="tag">Product ecosystem</div><h2>Everything a restaurant needs. <span class="grad">One ecosystem.</span></h2><p>From the first scan at the table to the final sales report.</p></div>
-  <div class="filters rv" id="filters">
-   <button class="f on" data-f="all">All</button><button class="f" data-f="x">Customer experience</button><button class="f" data-f="o">Operations</button><button class="f" data-f="a">AI &amp; growth</button>
+<!-- PHOTO REEL -->
+<section class="reel" aria-label="Dishes">
+  <div class="wrap reel-head">
+    <h2>Built for cafés, fine dining, hotels, QSR and restaurant chains.</h2>
+    <p>Every dish on your menu can become something guests stop and look at.</p>
   </div>
-  <div class="grid" id="grid"></div>
- </div>
+  <div class="reel-track" id="reelTrack"></div>
 </section>
 
-<section class="show" id="showcase">
- <div class="wrap sg">
-  <div class="rv">
-   <div class="tag">The future is on your table</div>
-   <h2>Don’t just read the menu. <span class="grad">Experience it.</span></h2>
-   <p>Guests scan a QR code, spin each dish in 3D and place it on their table in AR — no app to install.</p>
-   <div class="ul"><div>Interactive 3D dishes</div><div>WebAR placement</div><div>Multi-language menus</div><div>QR-based access</div><div>Dish details</div><div>Online ordering</div></div>
-   <a href="#contact" class="btn pri">See LiveDish AI</a>
+<!-- PEEL -->
+<section class="peel" id="peel">
+  <div class="peel-stick" id="stick">
+    <div class="wrap peel-grid">
+      <div class="peel-copy">
+        <div class="kicker"><span class="dot"></span> LiveDish AI</div>
+        <h2>Don't just read the menu. <span class="grad">Experience it.</span></h2>
+        <p>Guests spin a dish in 3D, peel it apart layer by layer and place it on their own table in AR before they order.</p>
+        <div class="meter-row"><div class="meter" id="meter"><b></b></div><span id="stageText">Whole burger</span></div>
+        <button class="btn btn-primary" data-demo>See it on your menu</button>
+      </div>
+      <div class="peel-stage" id="peelStage">
+        <div class="ph fb" data-img="burger" data-alt="Burger" style="--h:24"></div>
+      </div>
+    </div>
+    <div class="tags" id="tags"></div>
   </div>
-  <div class="phones rv">
-   <div class="phone" id="phone">
-    <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=700&q=75" alt="Dish shown in AR">
-    <div class="scan"></div>
-    <div class="hot h1"><b>Margherita</b><br>₹399 · Veg</div>
-    <div class="hot h2">◎ View in AR</div>
-   </div>
-  </div>
- </div>
 </section>
 
+<section class="features">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <div class="kicker"><span class="dot"></span> The future is on your table</div>
+      <h2>Everything a guest needs to say yes.</h2>
+      <p>LiveDish AI turns a flat menu into realistic 3D dishes with supported AR, opened from a single QR code.</p>
+    </div>
+    <div class="feat-grid rv">
+      <div class="feat"><span class="gl">3D</span><h3>Interactive 3D dishes</h3><p>Spin, zoom and peel every dish to see exactly what arrives.</p></div>
+      <div class="feat"><span class="gl">AR</span><h3>WebAR placement</h3><p>Guests place the dish on their table from the phone browser. No app.</p></div>
+      <div class="feat"><span class="gl">QR</span><h3>QR-based access</h3><p>One code on the table opens the live menu instantly.</p></div>
+      <div class="feat"><span class="gl">EN · हिं · தமிழ்</span><h3>Multi-language menus</h3><p>Serve guests in the language they read most comfortably.</p></div>
+      <div class="feat"><span class="gl">kcal · allergens</span><h3>Dish information</h3><p>Calories, allergens and ingredients, right next to each layer.</p></div>
+      <div class="feat"><span class="gl">Cart</span><h3>Online ordering</h3><p>From the 3D dish straight to the kitchen display.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- PRODUCTS -->
+<section class="products" id="products">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <div class="kicker"><span class="dot"></span> Our product ecosystem</div>
+      <h2>Everything your restaurant needs. <span class="grad">One ecosystem.</span></h2>
+      <p>Intelligent applications for every part of the restaurant journey, from the first guest interaction to the final business report.</p>
+    </div>
+    <div class="filters rv" id="filters">
+      <button class="filter active" data-filter="all">All products</button>
+      <button class="filter" data-filter="experience">Customer experience</button>
+      <button class="filter" data-filter="operations">Restaurant operations</button>
+      <button class="filter" data-filter="ai">AI &amp; growth</button>
+    </div>
+    <div id="productMount"></div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section class="gallery">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <div class="kicker"><span class="dot"></span> Menu in motion</div>
+      <h2>Dishes that sell themselves.</h2>
+      <p>Photos, 3D models and AR from the same dish record. Tilt a tile to feel the depth.</p>
+    </div>
+    <div class="bento rv" id="bento"></div>
+  </div>
+</section>
+
+<!-- ECOSYSTEM -->
 <section class="eco" id="platform">
- <div class="wrap">
-  <div class="sh rv" style="margin-inline:auto"><div class="tag">One connected platform</div><h2>Every part of your restaurant. <span class="grad">Working together.</span></h2></div>
-  <div class="orb rv">
-   <div class="ring"></div><div class="ring r2"></div>
-   <div class="core">LIVE<br>DISH-AI</div>
-   <div class="spin" id="spin"></div>
+  <div class="wrap">
+    <div class="sec-head rv" style="margin-bottom:0">
+      <div class="kicker"><span class="dot"></span> One connected platform</div>
+      <h2>All your restaurant operations. <span class="grad">Working together.</span></h2>
+      <p>Customer experience, kitchen and business intelligence share one command center. Drag the ring to look around.</p>
+    </div>
+    <div class="ring-wrap" id="ringWrap">
+      <div class="ring" id="ring">
+        <div class="core" id="core"><strong>LIVE DISH-AI</strong><small>COMMAND CENTER</small></div>
+      </div>
+    </div>
   </div>
- </div>
 </section>
 
-<section id="features" style="padding-top:0">
- <div class="wrap">
-  <div class="sh rv"><div class="tag">Why LIVE DISH-AI</div><h2>Technology that works as hard as <span class="grad">your kitchen.</span></h2></div>
-  <div class="bg">
-   <div class="ben rv"><i>⚡</i><h3>Operate smarter</h3><p>Move everyday workflows into connected digital tools.</p></div>
-   <div class="ben rv"><i>✦</i><h3>AI-powered efficiency</h3><p>Automate repetitive tasks and decisions.</p></div>
-   <div class="ben rv"><i>🥽</i><h3>Immersive dining</h3><p>Bring 3D and AR into the customer journey.</p></div>
-   <div class="ben rv"><i>📱</i><h3>Mobile first</h3><p>Fast on every phone, tablet and desktop.</p></div>
-   <div class="ben rv"><i>🌍</i><h3>Ready to scale</h3><p>From one café to many branches.</p></div>
-   <div class="ben rv"><i>🔗</i><h3>Connected</h3><p>Guest apps and back-office in one place.</p></div>
+<!-- BENEFITS -->
+<section class="benefits" id="features">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <div class="kicker"><span class="dot"></span> Why LIVE DISH-AI</div>
+      <h2>Technology that works as hard as <span class="grad">your restaurant.</span></h2>
+      <p>Built to improve the guest experience while simplifying the everyday work behind it.</p>
+    </div>
+    <div class="bgrid">
+      <div class="ben tilt rv"><div class="ico">⚡</div><h3>Operate smarter</h3><p>Bring everyday restaurant workflows into connected digital tools.</p></div>
+      <div class="ben tilt rv"><div class="ico">✦</div><h3>AI-powered efficiency</h3><p>Automation takes over repetitive tasks and routine decisions.</p></div>
+      <div class="ben tilt rv"><div class="ico">🥽</div><h3>Immersive experiences</h3><p>3D and augmented reality inside the dining journey.</p></div>
+      <div class="ben tilt rv"><div class="ico">📱</div><h3>Mobile first</h3><p>Guest experiences and management tools that work on any device.</p></div>
+      <div class="ben tilt rv"><div class="ico">🌍</div><h3>Ready to scale</h3><p>Grow from one location to many branches on the same platform.</p></div>
+      <div class="ben tilt rv"><div class="ico">🔗</div><h3>Connected ecosystem</h3><p>Guest-facing apps and business management, closer together.</p></div>
+    </div>
   </div>
- </div>
 </section>
 
-<section class="price" id="pricing">
- <div class="wrap">
-  <div class="sh rv"><div class="tag">Simple plans</div><h2>Start small. <span class="grad">Grow without limits.</span></h2></div>
-  <div class="bill rv"><button class="f on" data-b="m">Monthly</button><button class="f" data-b="y">Yearly · save more</button></div>
-  <div class="pg">
-   <div class="pc rv"><h3>Starter</h3><p class="d">Independent cafés and small restaurants.</p><div class="amt" data-m="999" data-y="9990">₹999<small>/month</small></div><ul><li>Digital QR menu</li><li>Up to 50 dishes</li><li>Menu management</li><li>Basic analytics</li><li>Email support</li></ul><button class="btn" onclick="openM('Starter')">Get started</button></div>
-   <div class="pc pop rv"><span class="pl">MOST POPULAR</span><h3>Professional</h3><p class="d">Growing and premium restaurants.</p><div class="amt" data-m="2499" data-y="24990">₹2,499<small>/month</small></div><ul><li>Everything in Starter</li><li>3D food experiences</li><li>WebAR features</li><li>Multi-language menus</li><li>Online ordering</li><li>Customer analytics</li></ul><button class="btn pri" onclick="openM('Professional')">Get started</button></div>
-   <div class="pc rv"><h3>Enterprise</h3><p class="d">Hotel groups and restaurant chains.</p><div class="amt" data-m="4999" data-y="49990">₹4,999<small>/month onwards</small></div><ul><li>Everything in Professional</li><li>Multiple branches</li><li>Central dashboard</li><li>Advanced analytics</li><li>Custom integrations</li><li>Priority support</li></ul><button class="btn" onclick="openM('Enterprise')">Contact sales</button></div>
+<!-- PRICING -->
+<section class="pricing" id="pricing">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <div class="kicker"><span class="dot"></span> Simple and flexible plans</div>
+      <h2>Choose your path to <span class="grad">smarter operations.</span></h2>
+      <p>Start with what you need. Expand as your restaurant grows.</p>
+    </div>
+    <div class="billing rv"><button class="active" data-billing="monthly">Monthly</button><button data-billing="yearly">Yearly, save more</button></div>
+    <div class="plans">
+      <div class="plan rv">
+        <h3>Starter</h3><p class="d">For independent cafés and small restaurants.</p>
+        <div class="price" data-month="999" data-year="9990">₹999<small>/month</small></div>
+        <ul><li>Digital QR menu</li><li>Up to 50 dishes</li><li>Menu management</li><li>Basic analytics</li><li>Email support</li></ul>
+        <button class="btn btn-ghost" data-demo="Starter">Get started</button>
+      </div>
+      <div class="plan pop rv">
+        <span class="pop-l">MOST POPULAR</span>
+        <h3>Professional</h3><p class="d">For growing and premium restaurants.</p>
+        <div class="price" data-month="2499" data-year="24990">₹2,499<small>/month</small></div>
+        <ul><li>Everything in Starter</li><li>3D food experiences</li><li>WebAR features</li><li>Multi-language menus</li><li>Online ordering</li><li>Customer analytics</li></ul>
+        <button class="btn btn-primary" data-demo="Professional">Get started</button>
+      </div>
+      <div class="plan rv">
+        <h3>Enterprise</h3><p class="d">For hotel groups and restaurant chains.</p>
+        <div class="price" data-month="4999" data-year="49990">₹4,999<small>/month onwards</small></div>
+        <ul><li>Everything in Professional</li><li>Multiple branches</li><li>Central dashboard</li><li>Advanced analytics</li><li>Custom integrations</li><li>Priority support</li></ul>
+        <button class="btn btn-ghost" data-demo="Enterprise">Contact sales</button>
+      </div>
+    </div>
+    <p class="fine">Indicative starting prices. Features, integrations and usage limits depend on the selected subscription.</p>
   </div>
-  <p class="note">Indicative starting prices. Features and usage limits depend on the selected plan.</p>
- </div>
 </section>
 
+<!-- CTA -->
 <section class="cta" id="contact">
- <div class="wrap"><div class="cp rv">
-  <div class="tag">Let’s build it together</div>
-  <h2>Your restaurant’s next chapter <span class="grad">starts here.</span></h2>
-  <p>Tell us about your restaurant and we’ll arrange a personal demo.</p>
-  <button class="btn pri" onclick="openM()">Book your demo</button>
- </div></div>
+  <div class="wrap">
+    <div class="cta-panel rv">
+      <div class="ph" data-img="interior" data-alt="Restaurant interior" style="--h:20"></div>
+      <div class="kicker"><span class="dot"></span> Let's build the future</div>
+      <h2>Your restaurant's next chapter <span class="grad">starts here.</span></h2>
+      <p>Ready to make your restaurant smarter, faster and more connected? Let's see what LIVE DISH-AI can do for your business.</p>
+      <button class="btn btn-primary" data-demo>Book your personal demo</button>
+    </div>
+  </div>
 </section>
+</main>
 
 <footer>
- <div class="wrap">
-  <div class="fg">
-   <div><a href="#home" class="logo" style="font-size:22px;margin:0;color:var(--w)">LIVE<b>DISH</b>-AI</a><p>One platform for complete restaurant management.</p></div>
-   <div><h4>Explore</h4><a href="#products">Products</a><a href="#showcase">3D &amp; AR</a><a href="#platform">Platform</a><a href="#pricing">Pricing</a></div>
-   <div><h4>Solutions</h4><a href="#products">AR menu</a><a href="#products">Online ordering</a><a href="#products">Operations</a><a href="#products">AI automation</a></div>
-   <div><h4>Company</h4><a href="#contact">Book a demo</a><a href="#contact">Partnerships</a><a href="mailto:hello@livedish.ai">hello@livedish.ai</a></div>
+  <div class="wrap">
+    <div class="fgrid">
+      <div class="fabout">
+        <a href="#home" class="logo">LIVE<b>DISH</b>-AI<small>RESTAURANT TECHNOLOGY</small></a>
+        <p>One platform for complete restaurant management. Guest experiences, intelligent operations and AI-powered growth.</p>
+        <span style="font-size:13px;color:var(--saffron)">✦ Technology for the next generation of restaurants.</span>
+      </div>
+      <div class="fcol"><h4>Explore</h4><a href="#products">Our products</a><a href="#platform">Our platform</a><a href="#features">Features</a><a href="#pricing">Pricing</a></div>
+      <div class="fcol"><h4>Solutions</h4><a href="#peel">AR restaurant menu</a><a href="#products">Online ordering</a><a href="#products">Restaurant operations</a><a href="#products">AI automation</a></div>
+      <div class="fcol"><h4>Company</h4><a href="#contact">Contact us</a><a href="#contact">Book a demo</a><a href="#contact">Partnerships</a><a href="mailto:hello@livedish.ai">hello@livedish.ai</a></div>
+    </div>
+    <div class="fbot"><span>© <span id="year"></span> LIVE DISH-AI. All rights reserved.</span><span>ONE PLATFORM. COMPLETE RESTAURANT MANAGEMENT.</span></div>
   </div>
-  <div class="fb"><span>© <span id="yr"></span> LIVE DISH-AI. All rights reserved.</span><span>One platform. Complete restaurant management.</span></div>
- </div>
 </footer>
 
-<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="mh">
- <div class="mb">
-  <button class="x" onclick="closeM()" aria-label="Close">×</button>
-  <div class="tag">Let’s connect</div><h2 id="mh">Experience LIVE DISH-AI</h2>
-  <p>Share a few details and we’ll follow up with a demo.</p>
-  <form id="form">
-   <label for="n">Your name</label><input id="n" name="name" required autocomplete="name">
-   <label for="e">Email</label><input id="e" name="email" type="email" required autocomplete="email">
-   <label for="r">Restaurant name</label><input id="r" name="restaurant" required>
-   <label for="ps">Interested in</label>
-   <select id="ps" name="product"><option>Complete Restaurant Platform</option><option>LiveDish AI – 3D &amp; AR Menu</option><option>Smart Ordering</option><option>TableBook AI</option><option>Restaurant Operations</option><option>AI Automation</option><option>Starter</option><option>Professional</option><option>Enterprise</option></select>
-   <button class="btn pri" type="submit">Request a demo</button>
-  </form>
- </div>
+<!-- DEMO MODAL -->
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="mTitle">
+  <div class="mbox" id="mbox">
+    <button class="x" id="mClose" aria-label="Close">×</button>
+    <div class="kicker"><span class="dot"></span> Let's connect</div>
+    <h2 id="mTitle">Experience LIVE DISH-AI.</h2>
+    <form id="demoForm">
+      <p>Tell us about your restaurant and we will arrange a personal demo.</p>
+      <div class="field"><label for="fName">Your name</label><input id="fName" name="name" type="text" autocomplete="name" required placeholder="Enter your name"></div>
+      <div class="field"><label for="fEmail">Email address</label><input id="fEmail" name="email" type="email" autocomplete="email" required placeholder="you@restaurant.com"></div>
+      <div class="field"><label for="fRest">Restaurant name</label><input id="fRest" name="restaurant" type="text" required placeholder="Your restaurant name"></div>
+      <div class="field"><label for="productSelect">Interested product</label>
+        <select id="productSelect" name="product"><option>Complete Restaurant Platform</option><option>LiveDish AI – 3D &amp; AR Menu</option><option>Smart Ordering</option><option>TableBook AI</option><option>Restaurant Operations</option><option>AI Automation</option><option>Starter</option><option>Professional</option><option>Enterprise</option></select></div>
+      <button type="submit" class="btn btn-primary">Request a demo</button>
+    </form>
+    <div class="sent" id="sent">
+      <p id="sentMsg"></p>
+      <div class="mailline"><span id="mailAddr">hello@livedish.ai</span><button type="button" id="copyMail">Copy</button></div>
+      <a class="btn btn-ghost" id="mailLink" href="mailto:hello@livedish.ai">Open in email app</a>
+      <button class="btn btn-primary" type="button" id="doneBtn">Done</button>
+    </div>
+  </div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
-/* ---------- IMAGES: replace these URLs with your own later ---------- */
-const U=id=>`https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=600&q=75`;
-const IMG=['1569718212165-3a8278d5f624','1513104890138-7c749659a591','1555939594-58d7cb561ad1','1551782450-a2132b4ba21d','1540189549336-e6e99c3679fe','1567620905732-2d1ec7ab7445','1547592180-85f173990554'];
+(function(){
+'use strict';
+document.documentElement.classList.add('js');
+var $=function(s,c){return (c||document).querySelector(s)}, $$=function(s,c){return Array.prototype.slice.call((c||document).querySelectorAll(s))};
+var clamp=function(v,a,b){a=a===undefined?0:a;b=b===undefined?1:b;return Math.min(b,Math.max(a,v))};
+var lerp=function(a,b,t){return a+(b-a)*t};
+var smooth=function(a,b,v){var t=clamp((v-a)/(b-a));return t*t*(3-2*t)};
+var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+var fine=matchMedia('(hover:hover) and (pointer:fine)').matches;
 
-/* ---------- products ---------- */
-const P=[
-['🥽','Scanivore','Immersive AR and AI ordering for every table.','AR experience','x'],
-['🍜','LiveDish AI','Turn menus into 3D and WebAR food experiences.','3D + WebAR','x',1],
-['🛒','Smart Ordering','Dine-in, takeaway and delivery on your own platform.','Online orders','x'],
-['📅','TableBook AI','Live availability and automated reservations.','Reservations','x'],
-['🎁','Foodie Rewards','Points, rewards and referrals that bring guests back.','Loyalty','x'],
-['🤖','FoodMate AI','Dish suggestions based on taste and budget.','AI assistant','x'],
-['👨‍🍳','KitchenFlow','Kitchen display, live order queue and prep timing.','Kitchen','o'],
-['📦','StockChef AI','Stock levels, expiry alerts, suppliers and wastage.','Inventory','o'],
-['📊','RestaurantIQ','Sales analytics and performance reports.','Analytics','o'],
-['👥','StaffMate','Shifts, attendance, leave and team performance.','Staff','o'],
-['🧮','MenuCost AI','Recipe costs, margins and dish profitability.','Food costing','o'],
-['📸','FoodStudio AI','Food visuals and promotional creatives.','Creative studio','a'],
-['💬','WaiterBot AI','A virtual assistant for menu questions and enquiries.','AI chatbot','a'],
-['⭐','ReviewBoost AI','Collect feedback and understand sentiment.','Feedback','a'],
-['🚀','RestaurantMarketing AI','Social campaigns and promotions, generated.','AI marketing','a'],
-['🌐','RestaurantOS','One environment for your essential operations.','All-in-one','a']];
-const grid=document.getElementById('grid');
-grid.innerHTML=P.map(p=>`<article class="card${p[5]?' ft':''}" data-c="${p[4]}"><div class="ic">${p[0]}</div><h4>${p[1]}</h4><p>${p[2]}</p><em>${p[3]}</em></article>`).join('');
-
-/* marquee */
-const mt=document.getElementById('mt');
-mt.innerHTML=[...IMG,...IMG].map((id,i)=>`<img src="${U(id)}" alt="" loading="lazy" onerror="this.style.background='#2a1a10';this.removeAttribute('src')">`).join('');
-
-/* ecosystem orbit */
-const E=[['🍽️','Guest'],['🛒','Orders'],['📅','Tables'],['🎁','Rewards'],['👨‍🍳','Kitchen'],['📦','Stock'],['📊','Analytics'],['🤖','AI']];
-const big=()=>Math.min(document.querySelector('.orb').clientWidth,560)/2*.82;
-const spin=document.getElementById('spin');
-function orbit(){const r=big();spin.innerHTML=E.map((e,i)=>`<div class="node" style="--a:${i*45}deg;--r:${r}px"><span>${e[0]}<small>${e[1]}</small></span></div>`).join('')}
-orbit();addEventListener('resize',orbit);
-
-/* filters */
-document.getElementById('filters').addEventListener('click',e=>{
- const b=e.target.closest('.f');if(!b)return;
- document.querySelectorAll('#filters .f').forEach(x=>x.classList.toggle('on',x===b));
- document.querySelectorAll('.card').forEach(c=>c.hidden=b.dataset.f!=='all'&&c.dataset.c!==b.dataset.f);
+/* ================= PHOTOS =================
+   Replace any URL below with your own image. Keys match data-img attributes and the reel / gallery lists. */
+var U=function(id){return 'https://images.unsplash.com/'+id+'?auto=format&fit=crop&w=900&q=80'};
+var IMAGES={
+  ramen:    U('photo-1569718212165-3a8278d5f624'),
+  soup:     U('photo-1547592180-85f173990554'),
+  plated:   U('photo-1414235077428-338989a2e8c0'),
+  interior: U('photo-1517248135467-4c7edcad34c4'),
+  spread:   U('photo-1504674900247-0877df9cc836'),
+  salad:    U('photo-1546069901-ba9599a7e63c'),
+  pizza:    U('photo-1565299624946-b28f40a0ae38'),
+  burger:   U('photo-1568901346375-23c9450c58cd'),
+  bowl:     U('photo-1540189549336-e6e99c3679fe'),
+  dessert:  U('photo-1565958011703-44f9829ba187'),
+  toast:    U('photo-1482049016688-2d3e1b311543')
+};
+var REEL=[['ramen','Tonkotsu ramen',24],['pizza','Wood-fired pizza',8],['plated','Chef’s tasting plate',32],['salad','Garden salad',110],['burger','Smash burger',18],['dessert','Molten dessert',340],['soup','Spiced soup',14],['bowl','Rice bowl',40]];
+var BENTO=[['t-a','ramen','Tonkotsu ramen','3D + AR',24],['','pizza','Wood-fired pizza','AR ready',8],['t-c','dessert','Molten dessert','3D',340],['','salad','Garden salad','AR ready',110],['t-e','plated','Chef’s tasting plate','3D + AR',32],['','toast','Avocado toast','3D',50],['','bowl','Rice bowl','AR ready',40]];
+function slot(key,alt,hue,cls){
+  var d=document.createElement('div');d.className='ph'+(cls?' '+cls:'');d.style.setProperty('--h',hue);d.setAttribute('data-img',key);d.setAttribute('data-alt',alt);return d;
+}
+function loadSlot(el){
+  var url=IMAGES[el.getAttribute('data-img')]; if(!url) return;
+  var im=new Image(); im.alt=el.getAttribute('data-alt')||''; im.loading='lazy'; im.decoding='async'; im.referrerPolicy='no-referrer';
+  im.onload=function(){el.classList.add('ok')}; im.onerror=function(){im.remove()};
+  el.appendChild(im); im.src=url;
+}
+/* Reel (list doubled for a seamless loop) */
+var reel=$('#reelTrack');
+REEL.concat(REEL).forEach(function(r,i){
+  var s=document.createElement('div');s.className='shot ph';s.style.setProperty('--h',r[2]);s.setAttribute('data-img',r[0]);s.setAttribute('data-alt',r[1]);
+  var c=document.createElement('span');c.textContent=r[1];s.appendChild(c);
+  if(i>=REEL.length)s.setAttribute('aria-hidden','true');
+  reel.appendChild(s);
 });
-
-/* 3D tilt + spotlight on cards (desktop only) */
-const fine=matchMedia('(hover:hover) and (pointer:fine)').matches;
-if(fine){
- grid.addEventListener('mousemove',e=>{const c=e.target.closest('.card');if(!c)return;
-  const r=c.getBoundingClientRect(),x=(e.clientX-r.left)/r.width,y=(e.clientY-r.top)/r.height;
-  c.style.transform=`rotateX(${(.5-y)*12}deg) rotateY(${(x-.5)*14}deg) translateZ(10px)`;
-  c.style.setProperty('--x',x*100+'%');c.style.setProperty('--y',y*100+'%')});
- grid.addEventListener('mouseout',e=>{const c=e.target.closest('.card');if(c)c.style.transform=''});
- const gl=document.getElementById('glow');
- addEventListener('mousemove',e=>{gl.style.left=e.clientX+'px';gl.style.top=e.clientY+'px'});
-}else document.getElementById('glow').style.display='none';
-
-/* reveal */
-const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.12});
-document.querySelectorAll('.rv').forEach((el,i)=>{el.style.transitionDelay=(i%3)*90+'ms';io.observe(el)});
-
-/* nav */
-const bg=document.getElementById('burger'),lk=document.getElementById('links');
-bg.onclick=()=>{const o=lk.classList.toggle('open');bg.textContent=o?'×':'☰';bg.setAttribute('aria-expanded',o)};
-lk.querySelectorAll('a').forEach(a=>a.onclick=()=>{lk.classList.remove('open');bg.textContent='☰'});
-
-/* pricing toggle */
-document.querySelectorAll('[data-b]').forEach(b=>b.onclick=()=>{
- document.querySelectorAll('[data-b]').forEach(x=>x.classList.toggle('on',x===b));
- const y=b.dataset.b==='y';
- document.querySelectorAll('.amt').forEach(a=>a.innerHTML='₹'+Number(y?a.dataset.y:a.dataset.m).toLocaleString('en-IN')+`<small>${y?'/year':'/month'}</small>`);
+/* Bento gallery */
+var bento=$('#bento');
+BENTO.forEach(function(b){
+  var t=document.createElement('div');t.className='tile tilt '+b[0];
+  t.appendChild(slot(b[1],b[2],b[4]));
+  var c=document.createElement('div');c.className='cap';c.innerHTML='<strong>'+b[2]+'</strong><em>'+b[3]+'</em>';t.appendChild(c);
+  bento.appendChild(t);
 });
+$$('.ph[data-img]').forEach(loadSlot);
+
+/* ================= PRODUCTS ================= */
+var PRODUCTS=[
+ ['experience','🥽','Scanivore','More orders, less effort. Powered by AR and AI, an immersive ordering experience.','AR experience'],
+ ['experience','🍜','LiveDish AI','Turn ordinary menus into immersive 3D and augmented reality food experiences.','3D + WebAR'],
+ ['experience','🛒','Smart Ordering','Your own ordering platform for dine-in, takeaway and delivery.','Online orders'],
+ ['experience','📅','TableBook AI','Smart table reservations, live availability and automated booking management.','Reservations'],
+ ['experience','🎁','Foodie Rewards','Turn first-time visitors into regulars with points, rewards and referrals.','Loyalty'],
+ ['experience','🤖','FoodMate AI','Food recommendations based on each guest’s taste, preferences and budget.','AI assistant'],
+ ['operations','👨‍🍳','KitchenFlow','Kitchen display, live order queue and preparation time management.','Kitchen management'],
+ ['operations','📦','StockChef AI','Track ingredients, stock levels, expiry alerts, suppliers and food waste.','Inventory'],
+ ['operations','📊','RestaurantIQ','Understand your business with sales analytics, reports and insights.','Analytics'],
+ ['operations','👥','StaffMate','Manage employees, attendance, shifts, leave and team performance.','Staff management'],
+ ['operations','🧮','MenuCost AI','Calculate recipe costs, ingredient expenses, food margins and dish profitability.','Food costing'],
+ ['ai','📸','FoodStudio AI','Create stunning food visuals, marketing creatives and promotional campaigns.','AI creative studio'],
+ ['ai','💬','WaiterBot AI','A virtual assistant for menu questions, recommendations and enquiries.','AI chatbot'],
+ ['ai','⭐','ReviewBoost AI','Collect feedback, understand customer sentiment and improve every visit.','Customer feedback'],
+ ['ai','🚀','RestaurantMarketing AI','Generate social campaigns, promotions and engagement content.','AI marketing'],
+ ['ai','🌐','RestaurantOS','A unified environment connecting your restaurant’s essential operations.','All-in-one platform']
+];
+var CATS=[['experience','Customer experience','Discover · Order · Experience · Return'],['operations','Restaurant operations','Manage · Monitor · Optimise · Grow'],['ai','AI & business growth','Automate · Engage · Promote · Expand']];
+var mount=$('#productMount'),n=0;
+CATS.forEach(function(c){
+  var h=document.createElement('div');h.className='cat-title';h.innerHTML='<h3></h3><span></span>';h.firstChild.textContent=c[1];h.lastChild.textContent=c[2];mount.appendChild(h);
+  var g=document.createElement('div');g.className='pgrid';g.setAttribute('data-cat',c[0]);
+  PRODUCTS.filter(function(p){return p[0]===c[0]}).forEach(function(p){
+    n++;var a=document.createElement('article');a.className='pcard tilt rv';a.setAttribute('data-category',p[0]);
+    a.innerHTML='<div class="ptop"><div class="pico"></div><span class="pnum"></span></div><h4></h4><p></p><div class="pbot"><span class="ptag"></span><span class="parr">↗</span></div>';
+    a.querySelector('.pico').textContent=p[1];a.querySelector('.pnum').textContent=String(n).padStart(2,'0');a.querySelector('h4').textContent=p[2];a.querySelector('p').textContent=p[3];a.querySelector('.ptag').textContent=p[4];
+    g.appendChild(a);
+  });
+  mount.appendChild(g);
+});
+$$('.filter').forEach(function(b){b.addEventListener('click',function(){
+  $$('.filter').forEach(function(f){f.classList.remove('active')});b.classList.add('active');
+  var cat=b.getAttribute('data-filter');
+  $$('.cat-title').forEach(function(t,i){var show=cat==='all'||CATS[i][0]===cat;t.hidden=!show;});
+  $$('.pgrid').forEach(function(g){g.hidden=!(cat==='all'||g.getAttribute('data-cat')===cat)});
+})});
+
+/* ================= ECOSYSTEM RING ================= */
+var NODES=[['🍽️','Customer experience'],['🛒','Online ordering'],['📅','Reservations'],['🎁','Loyalty & rewards'],['👨‍🍳','Kitchen management'],['📦','Inventory'],['📊','Business analytics'],['🤖','AI automation']];
+var ring=$('#ring'),ringWrap=$('#ringWrap'),core=$('#core'),nodeEls=[];
+NODES.forEach(function(nd){var e=document.createElement('div');e.className='node';e.innerHTML='<span></span><div></div>';e.firstChild.textContent=nd[0];e.lastChild.textContent=nd[1];ring.appendChild(e);nodeEls.push(e)});
+var ang=0,rvel=0,rdown=false,rlx=0,ringVisible=true,R=300,tilt=12;
+function ringR(){R=parseFloat(getComputedStyle(ringWrap).getPropertyValue('--R'))||300}
+ringR();addEventListener('resize',ringR);
+new IntersectionObserver(function(en){ringVisible=en[0].isIntersecting},{rootMargin:'100px'}).observe(ringWrap);
+ringWrap.addEventListener('pointerdown',function(e){rdown=true;rlx=e.clientX;rvel=0;try{ringWrap.setPointerCapture(e.pointerId)}catch(_){}});
+ringWrap.addEventListener('pointermove',function(e){if(!rdown)return;var dx=e.clientX-rlx;rlx=e.clientX;ang+=dx*.35;rvel=dx*.35*60});
+['pointerup','pointercancel'].forEach(function(t){ringWrap.addEventListener(t,function(){rdown=false})});
+var rlast=performance.now();
+function ringTick(now){
+  requestAnimationFrame(ringTick);
+  var dt=Math.min(.05,(now-rlast)/1000);rlast=now;
+  if(!ringVisible||document.hidden)return;
+  if(!rdown){ang+=rvel*dt+(reduce?0:9*dt);rvel*=Math.exp(-dt*3)}
+  var step=360/nodeEls.length;
+  nodeEls.forEach(function(el,i){
+    var a=(i*step+ang)*Math.PI/180,x=R*Math.sin(a),z=R*Math.cos(a),c=(Math.cos(a)+1)/2;
+    el.style.transform='translate3d('+x.toFixed(1)+'px,0,'+z.toFixed(1)+'px) rotateX('+tilt+'deg) scale('+(.72+.28*c).toFixed(3)+')';
+    el.style.opacity=(.28+.72*c).toFixed(3);
+  });
+  core.style.transform='rotateX('+tilt+'deg)';
+}
+requestAnimationFrame(ringTick);
+
+/* ================= UI ================= */
+var header=$('#top'),navLinks=$('#navLinks'),mt=$('#menuToggle');
+function setMenu(o){navLinks.classList.toggle('open',o);mt.setAttribute('aria-expanded',o);document.body.style.overflow=o?'hidden':''}
+mt.addEventListener('click',function(){setMenu(!navLinks.classList.contains('open'))});
+$$('a',navLinks).forEach(function(a){a.addEventListener('click',function(){setMenu(false)})});
+$('#year').textContent=new Date().getFullYear();
+
+var io=new IntersectionObserver(function(en){en.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.1,rootMargin:'0px 0px -6% 0px'});
+$$('.rv').forEach(function(el){io.observe(el)});
+
+/* tilt cards */
+if(fine&&!reduce){
+  $$('.tilt').forEach(function(c){
+    c.addEventListener('pointermove',function(e){var r=c.getBoundingClientRect(),x=(e.clientX-r.left)/r.width,y=(e.clientY-r.top)/r.height;
+      c.style.transform='perspective(900px) rotateX('+((.5-y)*9).toFixed(2)+'deg) rotateY('+((x-.5)*11).toFixed(2)+'deg) translateY(-4px)'});
+    c.addEventListener('pointerleave',function(){c.style.transform=''});
+  });
+  var glow=$('#glow');
+  addEventListener('pointermove',function(e){glow.style.transform='translate3d('+e.clientX+'px,'+e.clientY+'px,0)'},{passive:true});
+}else{$('#glow').style.display='none'}
+
+/* pricing */
+$$('[data-billing]').forEach(function(b){b.addEventListener('click',function(){
+  $$('[data-billing]').forEach(function(x){x.classList.remove('active')});b.classList.add('active');
+  var y=b.getAttribute('data-billing')==='yearly';
+  $$('.price').forEach(function(p){var v=y?p.getAttribute('data-year'):p.getAttribute('data-month');
+    var more=p.getAttribute('data-month')==='4999'&&!y?'/month onwards':(y?'/year':'/month');
+    p.innerHTML='₹'+Number(v).toLocaleString('en-IN')+'<small>'+more+'</small>'});
+})});
 
 /* modal */
-const modal=document.getElementById('modal');
-function openM(p){modal.classList.add('show');document.body.style.overflow='hidden';if(p)document.getElementById('ps').value=p}
-function closeM(){modal.classList.remove('show');document.body.style.overflow=''}
-modal.addEventListener('click',e=>{if(e.target===modal)closeM()});
-addEventListener('keydown',e=>{if(e.key==='Escape')closeM()});
-document.getElementById('form').addEventListener('submit',e=>{
- e.preventDefault();const d=Object.fromEntries(new FormData(e.target));
- location.href='mailto:hello@livedish.ai?subject='+encodeURIComponent('LIVE DISH-AI Demo Request')+'&body='+encodeURIComponent(`Name: ${d.name}\nEmail: ${d.email}\nRestaurant: ${d.restaurant}\nInterested in: ${d.product}`);
- closeM();
+var modal=$('#modal'),mbox=$('#mbox'),lastFocus=null;
+function openModal(prod){lastFocus=document.activeElement;mbox.classList.remove('done');modal.classList.add('show');document.body.style.overflow='hidden';
+  if(prod){var s=$('#productSelect');for(var i=0;i<s.options.length;i++){if(s.options[i].text===prod)s.selectedIndex=i}}
+  setTimeout(function(){$('#fName').focus()},30)}
+function closeModal(){modal.classList.remove('show');document.body.style.overflow='';if(lastFocus&&lastFocus.focus)lastFocus.focus()}
+$$('[data-demo]').forEach(function(b){b.addEventListener('click',function(){setMenu(false);openModal(b.getAttribute('data-demo')||'')})});
+$('#mClose').addEventListener('click',closeModal);$('#doneBtn').addEventListener('click',closeModal);
+modal.addEventListener('click',function(e){if(e.target===modal)closeModal()});
+addEventListener('keydown',function(e){if(e.key==='Escape'){closeModal();setMenu(false)}});
+$('#demoForm').addEventListener('submit',function(e){
+  e.preventDefault();var d=Object.fromEntries(new FormData(e.target).entries());
+  var body='Name: '+d.name+'\nEmail: '+d.email+'\nRestaurant: '+d.restaurant+'\nInterested product: '+d.product;
+  $('#sentMsg').textContent='Thanks, '+d.name+'. Your details are ready. Send them to the address below and the team will arrange your demo.';
+  $('#mailLink').href='mailto:hello@livedish.ai?subject='+encodeURIComponent('LIVE DISH-AI Demo Request')+'&body='+encodeURIComponent(body);
+  mbox.classList.add('done');window.__demoBody=body;
 });
-document.getElementById('yr').textContent=new Date().getFullYear();
+$('#copyMail').addEventListener('click',function(){var b=this,t=window.__demoBody?'hello@livedish.ai\n\n'+window.__demoBody:'hello@livedish.ai';
+  var ok=function(){b.textContent='Copied';setTimeout(function(){b.textContent='Copy'},1600)};
+  try{navigator.clipboard.writeText(t).then(ok,function(){})}catch(_){}});
 
-/* scroll: progress bar + phone rotation */
-const pr=document.getElementById('progress'),ph=document.getElementById('phone');
-let sy=0;
-function onScroll(){
- sy=scrollY;pr.style.width=(sy/(document.documentElement.scrollHeight-innerHeight)*100)+'%';
- const r=ph.getBoundingClientRect(),p=Math.min(1,Math.max(0,1-(r.top+r.height/2)/innerHeight));
- ph.style.setProperty('--p',p);
+/* ================= SCROLL STATE (works with or without WebGL) ================= */
+var peel=$('#peel'),stick=$('#stick'),peelStage=$('#peelStage'),heroStage=$('#heroStage'),meterEl=$('#meter'),stageText=$('#stageText');
+var peelP=0;
+function scrollUI(){
+  header.classList.toggle('solid',scrollY>30);
+  var r=peel.getBoundingClientRect(),tot=peel.offsetHeight-innerHeight;
+  peelP=clamp(-r.top/Math.max(1,tot));
+  meterEl.style.setProperty('--p',peelP.toFixed(3));
+  stageText.textContent=peelP<.1?'Whole burger':peelP<.62?'Peeling the layers':'Six layers, fully named';
 }
-addEventListener('scroll',onScroll,{passive:true});onScroll();
+addEventListener('scroll',scrollUI,{passive:true});addEventListener('resize',scrollUI);scrollUI();
 
-/* ---------- THREE.JS HERO: orbiting food plates ---------- */
-(function(){
- if(!window.THREE)return;
- const cv=document.getElementById('gl'),st=document.getElementById('stage');
- const R=new THREE.WebGLRenderer({canvas:cv,alpha:true,antialias:true});
- R.setPixelRatio(Math.min(devicePixelRatio,2));
- const S=new THREE.Scene(),C=new THREE.PerspectiveCamera(42,1,.1,100),G=new THREE.Group();S.add(G);
- /* circular mask so photos look like plates */
- const k=document.createElement('canvas');k.width=k.height=128;const x=k.getContext('2d');
- x.fillStyle='#000';x.fillRect(0,0,128,128);x.fillStyle='#fff';x.beginPath();x.arc(64,64,62,0,7);x.fill();
- const mask=new THREE.CanvasTexture(k),L=new THREE.TextureLoader();L.setCrossOrigin('anonymous');
- const N=IMG.length,plates=[];
- IMG.forEach((id,i)=>{
-  const m=new THREE.Mesh(new THREE.CircleGeometry(1,64),new THREE.MeshBasicMaterial({map:L.load(U(id)),color:0xffffff,side:THREE.DoubleSide}));
-  const rim=new THREE.Mesh(new THREE.RingGeometry(1,1.07,64),new THREE.MeshBasicMaterial({color:0xffc27a,side:THREE.DoubleSide}));
-  const a=i/N*Math.PI*2,g=new THREE.Group();g.add(m,rim);
-  g.position.set(Math.sin(a)*3.6,0,Math.cos(a)*3.6);g.rotation.y=a;g.userData={a,i};G.add(g);plates.push(g);
- });
- /* glowing core rings */
- const t1=new THREE.Mesh(new THREE.TorusGeometry(1.3,.025,16,100),new THREE.MeshBasicMaterial({color:0xff6a2b}));
- const t2=new THREE.Mesh(new THREE.TorusGeometry(2.1,.012,16,120),new THREE.MeshBasicMaterial({color:0xffc27a,transparent:true,opacity:.6}));
- t1.rotation.x=t2.rotation.x=Math.PI/2.2;S.add(t1,t2);
- /* spice particles */
- const n=260,pos=new Float32Array(n*3);
- for(let i=0;i<n*3;i++)pos[i]=(Math.random()-.5)*14;
- const pg=new THREE.BufferGeometry();pg.setAttribute('position',new THREE.BufferAttribute(pos,3));
- const pts=new THREE.Points(pg,new THREE.PointsMaterial({color:0xffa060,size:.05,transparent:true,opacity:.8}));S.add(pts);
- function size(){const w=st.clientWidth,h=st.clientHeight;R.setSize(w,h,false);C.aspect=w/h;
-  C.position.set(0,w<600?2.6:2,w<600?13:10.5);C.lookAt(0,-.2,0);C.updateProjectionMatrix()}
- size();addEventListener('resize',size);
- let mx=0,my=0,tx=0,ty=0,drag=0,vel=0,lx=0,vis=true;
- st.addEventListener('pointermove',e=>{const r=st.getBoundingClientRect();tx=(e.clientX-r.left)/r.width-.5;ty=(e.clientY-r.top)/r.height-.5;
-  if(drag){vel=(e.clientX-lx)*.01;lx=e.clientX}});
- st.addEventListener('pointerdown',e=>{drag=1;lx=e.clientX});
- addEventListener('pointerup',()=>drag=0);
- new IntersectionObserver(e=>vis=e[0].isIntersecting).observe(st);
- const still=matchMedia('(prefers-reduced-motion:reduce)').matches;
- let T=0;
- (function loop(){
-  requestAnimationFrame(loop);if(!vis)return;
-  T+=.01;mx+=(tx-mx)*.06;my+=(ty-my)*.06;
-  G.rotation.y+=(still?0:.004)+vel+(scrollY-sy)*0+0;vel*=.94;
-  G.rotation.y+=scrollY*0.00002;
-  G.rotation.x=my*.35;G.rotation.z=mx*.12;
-  plates.forEach(p=>{p.position.y=Math.sin(T*2+p.userData.i)*.25});
-  t1.rotation.z+=.01;t2.rotation.z-=.006;t1.rotation.y=mx;t2.rotation.y=-mx;
-  pts.rotation.y+=.0007;pts.position.y=Math.sin(T)*.2;
-  R.render(S,C);
- })();
+/* ================= THREE.JS ================= */
+var canvas=$('#gl'),gl=null;
+try{if(!window.THREE)throw 0;gl=new THREE.WebGLRenderer({canvas:canvas,antialias:true,alpha:true,powerPreference:'high-performance'})}catch(err){gl=null;document.documentElement.classList.add('no-gl');canvas.style.display='none'}
+if(gl)initScene();
+
+function initScene(){
+  var T=THREE;
+  gl.setPixelRatio(Math.min(devicePixelRatio||1,innerWidth<700?1.5:2));
+  gl.outputEncoding=T.sRGBEncoding;gl.toneMapping=T.ACESFilmicToneMapping;gl.toneMappingExposure=.82;
+  var scene=new T.Scene(),FOV=32,DIST=10;
+  var cam=new T.PerspectiveCamera(FOV,1,.1,60);cam.position.set(0,0,DIST);
+  var VISH=2*Math.tan(T.MathUtils.degToRad(FOV/2))*DIST;
+
+  scene.add(new T.HemisphereLight(0xffe2c4,0x2a140a,.75));
+  var key=new T.DirectionalLight(0xffd9ae,1.7);key.position.set(4,7,6);scene.add(key);
+  var rim=new T.PointLight(0xff6a2b,2.4,26);rim.position.set(-6,2,-3);scene.add(rim);
+  var fill=new T.PointLight(0x7fa8ff,.7,26);fill.position.set(6,-2,4);scene.add(fill);
+
+  var mat=function(c,r,m,x){return new T.MeshStandardMaterial(Object.assign({color:c,roughness:r,metalness:m||0,side:T.DoubleSide},x||{}))};
+  function noiseTex(){var c=document.createElement('canvas');c.width=c.height=128;var x=c.getContext('2d'),d=x.createImageData(128,128);
+    for(var i=0;i<d.data.length;i+=4){var v=110+Math.random()*145;d.data[i]=d.data[i+1]=d.data[i+2]=v;d.data[i+3]=255}
+    x.putImageData(d,0,0);var t=new T.CanvasTexture(c);t.wrapS=t.wrapT=T.RepeatWrapping;t.repeat.set(4,2);return t}
+  var lathe=function(pts,m){return new T.Mesh(new T.LatheGeometry(pts.map(function(p){return new T.Vector2(p[0],p[1])}),72),m)};
+
+  var dish=new T.Group(),burger=new T.Group();dish.add(burger);scene.add(dish);
+  var L={};
+  function layer(name,obj,y0,y1,mid,h){var g=new T.Group();g.add(obj);burger.add(g);L[name]={g:g,y0:y0,y1:y1,mid:mid,spin:h};g.position.y=y0}
+
+  /* buns */
+  var bread=mat(0xdb8d3c,.55,0);
+  var topP=[[0,0],[1.5,0],[1.58,.12],[1.52,.4],[1.28,.8],[.85,1.08],[.3,1.2],[0,1.22]];
+  var bunT=new T.Group();bunT.add(lathe(topP,mat(0xd9832f,.5,0,{emissive:0x2a1204})));
+  var seed=new T.InstancedMesh(new T.SphereGeometry(.05,8,6),mat(0xf7e8c6,.5,0),56),dm=new T.Object3D();
+  for(var i=0;i<56;i++){
+    var k=3+Math.floor(Math.random()*4),u=Math.random(),a=topP[k],b=topP[k+1];
+    var r=lerp(a[0],b[0],u),y=lerp(a[1],b[1],u),dr=b[0]-a[0],dy=b[1]-a[1],nl=Math.hypot(dr,dy),nx=dy/nl,ny=-dr/nl,ph=Math.random()*6.283;
+    var p=new T.Vector3(r*Math.cos(ph)+nx*Math.cos(ph)*.02,y+ny*.02,r*Math.sin(ph)+nx*Math.sin(ph)*.02);
+    dm.position.copy(p);dm.lookAt(p.clone().add(new T.Vector3(nx*Math.cos(ph),ny,nx*Math.sin(ph))));dm.rotateZ(Math.random()*6.283);
+    dm.scale.set(1.7,1,.55);dm.updateMatrix();seed.setMatrixAt(i,dm.matrix);
+  }
+  bunT.add(seed);
+  var bunB=lathe([[0,0],[1.2,0],[1.42,.08],[1.52,.26],[1.46,.44],[1.2,.52],[0,.52]],mat(0xcf8236,.6,0));
+
+  /* patty */
+  var patty=lathe([[0,0],[1.4,0],[1.53,.1],[1.5,.28],[1.42,.38],[0,.38]],mat(0x4a2918,.88,0,{bumpMap:noiseTex(),bumpScale:2.4}));
+
+  /* cheese */
+  var cg=new T.PlaneGeometry(3.05,3.05,22,22);cg.rotateX(-Math.PI/2);
+  var cp=cg.attributes.position;for(var j=0;j<cp.count;j++){var cx=cp.getX(j),cz=cp.getZ(j),rr=Math.hypot(cx,cz);if(rr>1.2)cp.setY(j,-Math.pow(rr-1.2,2)*.6)}
+  cg.computeVertexNormals();
+  var cheese=new T.Mesh(cg,mat(0xffb21c,.3,0,{emissive:0x3a2000}));cheese.rotation.y=Math.PI/4;
+
+  /* tomato */
+  var tomato=new T.Group();
+  [[-.5,.1],[.5,-.15]].forEach(function(o){var s=new T.Group();
+    s.add(new T.Mesh(new T.CylinderGeometry(1.1,1.1,.11,48),mat(0xd5301f,.32,0,{emissive:0x2a0603})));
+    var inn=new T.Mesh(new T.CylinderGeometry(.86,.86,.12,48),mat(0xf0603f,.4,0));s.add(inn);
+    s.position.set(o[0],0,o[1]);tomato.add(s)});
+
+  /* lettuce */
+  var tg=new T.TorusGeometry(1.38,.2,10,96);tg.rotateX(Math.PI/2);
+  var tp=tg.attributes.position;for(var q=0;q<tp.count;q++){var x=tp.getX(q),z=tp.getZ(q),y=tp.getY(q),ag=Math.atan2(z,x),rd=Math.hypot(x,z),nr=rd+Math.sin(ag*7+1)*.08+Math.sin(ag*17)*.04;
+    tp.setXYZ(q,Math.cos(ag)*nr,y+Math.sin(ag*11)*.075,Math.sin(ag)*nr)}
+  tg.computeVertexNormals();
+  var lettuce=new T.Group(),lm=mat(0x7fba3a,.5,0,{emissive:0x0f2204});
+  var lt=new T.Mesh(tg,lm);lt.scale.y=.7;lettuce.add(lt);
+  var lt2=lt.clone();lt2.scale.set(.74,.7,.74);lt2.rotation.y=.5;lettuce.add(lt2);
+  lettuce.add(new T.Mesh(new T.CylinderGeometry(1.05,1.05,.07,40),lm));
+
+  layer('bunB',bunB,0,0,.26);
+  layer('patty',patty,.5,1.15,.19);
+  layer('cheese',cheese,.9,2.05,.02);
+  layer('tomato',tomato,.96,2.85,.05);
+  layer('lettuce',lettuce,1.1,3.55,.06);
+  layer('bunT',bunT,1.2,4.55,.6);
+  var order=['bunT','lettuce','tomato','cheese','patty','bunB'],spinDir={bunT:1,lettuce:-1,tomato:1,cheese:-1,patty:1,bunB:-1};
+
+  /* ground rings */
+  var rings=new T.Group();
+  [1.9,2.5,3.2].forEach(function(r,i){var m=new T.Mesh(new T.RingGeometry(r-.012,r+.012,128),new T.MeshBasicMaterial({color:0xffa062,transparent:true,opacity:.32-i*.08,side:T.DoubleSide,depthWrite:false}));m.rotation.x=-Math.PI/2;rings.add(m)});
+  scene.add(rings);
+
+  /* orbiting ingredients */
+  var orb=new T.Group();scene.add(orb);
+  var bits=[];
+  function bit(geo,m,R,sp,ph,yy,sc){var me=new T.Mesh(geo,m);me.scale.setScalar(sc||1);orb.add(me);bits.push({m:me,R:R,sp:sp,ph:ph,y:yy})}
+  var tom=mat(0xe8402e,.35),leaf=mat(0x5fae30,.5),chil=mat(0xc4231a,.4),gold=mat(0xffb347,.3,.2),pep=mat(0x2a2220,.6);
+  bit(new T.SphereGeometry(.2,20,16),tom,2.7,.5,0,.6);
+  bit(new T.SphereGeometry(.15,18,14),tom,3.1,-.4,2,-.5);
+  bit(new T.SphereGeometry(.17,16,12).scale(1.5,.35,1),leaf,2.5,.45,3.4,1);
+  bit(new T.SphereGeometry(.15,16,12).scale(1.5,.35,1),leaf,3.3,-.35,4.8,.2);
+  bit(new T.ConeGeometry(.08,.46,10),chil,2.9,.6,1.2,-.1);
+  bit(new T.ConeGeometry(.07,.38,10),chil,3.4,-.5,5.6,.9);
+  bit(new T.SphereGeometry(.09,12,10),gold,2.3,.7,2.6,.1);
+  bit(new T.SphereGeometry(.07,12,10),gold,3.0,.55,0.6,1.3);
+  bit(new T.SphereGeometry(.06,10,8),pep,2.2,-.6,4,-.9);
+
+  /* embers */
+  function spriteTex(){var c=document.createElement('canvas');c.width=c.height=64;var x=c.getContext('2d'),g=x.createRadialGradient(32,32,0,32,32,32);g.addColorStop(0,'rgba(255,255,255,1)');g.addColorStop(.35,'rgba(255,180,110,.6)');g.addColorStop(1,'rgba(255,106,43,0)');x.fillStyle=g;x.fillRect(0,0,64,64);return new T.CanvasTexture(c)}
+  var EN=innerWidth<700?110:220,epos=new Float32Array(EN*3),espd=new Float32Array(EN);
+  for(var e2=0;e2<EN;e2++){epos[e2*3]=(Math.random()-.5)*15;epos[e2*3+1]=(Math.random()-.5)*8;epos[e2*3+2]=-4+Math.random()*7;espd[e2]=.12+Math.random()*.32}
+  var eg=new T.BufferGeometry();eg.setAttribute('position',new T.BufferAttribute(epos,3));
+  var embers=new T.Points(eg,new T.PointsMaterial({map:spriteTex(),color:0xff8a48,size:.2,transparent:true,opacity:.85,depthWrite:false,blending:T.AdditiveBlending,sizeAttenuation:true}));
+  scene.add(embers);
+
+  /* labels */
+  var LABELS={bunT:['Brioche bun','Toasted · 190 kcal · gluten'],lettuce:['Garden lettuce','Cold and crisp · 5 kcal'],tomato:['Heirloom tomato','Sliced to order · 10 kcal'],cheese:['Aged cheddar','Melted · 110 kcal · dairy'],patty:['Smash patty','120 g · medium · 280 kcal'],bunB:['Base bun','Butter-toasted · 170 kcal']};
+  var tagsEl=$('#tags'),tagEls=order.map(function(k,i){var t=document.createElement('div');t.className='tag '+(i%2?'l':'r');t.style.transitionDelay=(i*70)+'ms';
+    t.innerHTML='<div class="in"><i></i><div><b></b><small></small></div></div>';t.querySelector('b').textContent=LABELS[k][0];t.querySelector('small').textContent=LABELS[k][1];tagsEl.appendChild(t);return t});
+
+  /* resize */
+  var W=0,H=0;
+  function resize(){W=innerWidth;H=innerHeight;gl.setSize(W,H,false);cam.aspect=W/H;cam.updateProjectionMatrix()}
+  resize();addEventListener('resize',resize);
+
+  /* drag */
+  var spinOff=0,vel=0,down=false,lx=0,hint=$('#hint');
+  function bindDrag(el){
+    el.addEventListener('pointerdown',function(e){down=true;lx=e.clientX;vel=0;el.classList.add('drag');hint.classList.add('gone');try{el.setPointerCapture(e.pointerId)}catch(_){}});
+    el.addEventListener('pointermove',function(e){if(!down)return;var dx=e.clientX-lx;lx=e.clientX;spinOff+=dx*.012;vel=dx*.012*60});
+    ['pointerup','pointercancel'].forEach(function(t){el.addEventListener(t,function(){down=false;el.classList.remove('drag')})});
+  }
+  bindDrag(heroStage);bindDrag(peelStage);
+  var mx=0,my=0;
+  if(fine)addEventListener('pointermove',function(e){mx=e.clientX/innerWidth*2-1;my=e.clientY/innerHeight*2-1},{passive:true});
+
+  var last=performance.now(),t=0,e=0,base=0,first=true,px=0,py=0,ps=1,smx=0,smy=0,tv=new T.Vector3(),ER=0;
+  function frame(now){
+    requestAnimationFrame(frame);
+    var dt=Math.min(.05,(now-last)/1000);last=now;
+    var pr=peel.getBoundingClientRect();
+    if(pr.bottom<=0||document.hidden){canvas.style.visibility='hidden';return}
+    canvas.style.visibility='visible';canvas.style.opacity=clamp(pr.bottom/(H*.6)).toFixed(3);
+    t+=dt;
+    var ppu=H/VISH,inAR=pr.top<H*.55;
+    var sr=(inAR?peelStage:heroStage).getBoundingClientRect();
+    var cx=sr.left+sr.width/2,cy=sr.top+sr.height/2,s;
+    if(inAR)s=Math.min((sr.height*.84/ppu)/5.75,(sr.width*(W<980?.34:.46)/ppu)/3.2);
+    else s=Math.min((sr.height*.6/ppu)/2.45,(sr.width*.82/ppu)/3.2);
+    var tx=(cx-W/2)/ppu,ty=(H/2-cy)/ppu,k=first?1:1-Math.exp(-dt*5);first=false;
+    px=lerp(px,tx,k);py=lerp(py,ty,k);ps=lerp(ps,s,k);
+    e+=((inAR?smooth(.06,.5,peelP):0)-e)*(first?1:1-Math.exp(-dt*5));
+    var ee=e;ER=ee;
+
+    if(!down){spinOff+=vel*dt;vel*=Math.exp(-dt*3)}
+    base+=dt*(reduce?0:.42)*(1-ee*.6);
+    smx=lerp(smx,mx,.06);smy=lerp(smy,my,.06);
+    dish.position.set(px,py+Math.sin(t*1.3)*.05*ps,0);
+    dish.scale.setScalar(ps);
+    dish.rotation.set(lerp(.2,.42,ee)+smy*.1,base+spinOff+peelP*Math.PI*1.1,smx*.04);
+    var cen=lerp(1.2,2.85,ee);burger.position.y=-cen;
+    for(var key2 in L){var o=L[key2];o.g.position.y=lerp(o.y0,o.y1,ee);o.g.rotation.y=ee*spinDir[key2]*.55*Math.sin(t*.6+(key2.length))}
+
+    rings.position.set(px,py-(cen+.14)*ps,0);rings.scale.setScalar(ps);rings.rotation.y=t*.12;
+    orb.position.set(px,py,0);orb.scale.setScalar(ps*(1-ee));orb.visible=ee<.98;
+    for(var bi=0;bi<bits.length;bi++){var b=bits[bi],a=t*b.sp*(reduce?0:1)+b.ph;b.m.position.set(Math.cos(a)*b.R,b.y+Math.sin(t*1.4+b.ph)*.12,Math.sin(a)*b.R*.8);b.m.rotation.set(t*.8+b.ph,t*.6,0)}
+    if(!reduce){var pa=embers.geometry.attributes.position;for(var ei=0;ei<EN;ei++){var yy=pa.getY(ei)+espd[ei]*dt;if(yy>4.2)yy=-4.2;pa.setY(ei,yy);pa.setX(ei,pa.getX(ei)+Math.sin(t*.7+ei)*.0025)}pa.needsUpdate=true}
+    cam.position.x=smx*.25;cam.position.y=-smy*.15;cam.lookAt(0,0,0);
+
+    /* labels */
+    if(inAR){
+      scene.updateMatrixWorld();cam.updateMatrixWorld();
+      var top=stick.getBoundingClientRect().top,rad=1.62*ps*ppu;
+      for(var li=0;li<order.length;li++){
+        var nm=order[li],o2=L[nm];tv.set(0,o2.mid,0);o2.g.localToWorld(tv);tv.project(cam);
+        var x2=(tv.x*.5+.5)*W,y2=(-tv.y*.5+.5)*H-top,off=rad+10,side=li%2?-1:1;
+        var tw=tagEls[li].firstChild.offsetWidth||120,tx2=x2+side*off;
+        tx2=side>0?Math.min(tx2,W-14-tw):Math.max(tx2,14+tw);
+        tagEls[li].style.transform='translate3d('+tx2.toFixed(1)+'px,'+y2.toFixed(1)+'px,0)';
+        tagEls[li].style.opacity=smooth(.82,.98,ee)>.5?1:0;
+      }
+    }else{for(var z=0;z<tagEls.length;z++)tagEls[z].style.opacity=0}
+    gl.render(scene,cam);
+  }
+  requestAnimationFrame(frame);
+}
 })();
 </script>
-</body>
-</html>
+
+</body></html>

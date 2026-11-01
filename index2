@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0a0907">
+<title>LIVE DISH-AI | Complete Restaurant Technology</title>
+<meta name="description" content="LIVE DISH-AI – One platform for complete restaurant management. 3D & AR menus, AI ordering, reservations, inventory and automation.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700;800&family=Manrope:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0a0907;--p:#15110e;--p2:#1d1712;--o:#ff6a2b;--g:#ffc27a;--w:#faf6ef;--m:#a39a8f;--l:rgba(255,255,255,.1)}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--w);font-family:'Manrope',system-ui,sans-serif;overflow-x:hidden;line-height:1.6}
+a{color:inherit;text-decoration:none}button{font:inherit;cursor:pointer;color:inherit}
+img{max-width:100%;display:block}
+:focus-visible{outline:2px solid var(--g);outline-offset:3px}
+.wrap{width:min(1180px,92%);margin:auto;position:relative;z-index:1}
+h1,h2,h3,h4,.logo{font-family:'Bricolage Grotesque',sans-serif}
+.grad{background:linear-gradient(100deg,#fff,var(--g) 45%,var(--o));-webkit-background-clip:text;background-clip:text;color:transparent}
+.tag{color:var(--g);font-size:12px;font-weight:700;letter-spacing:.06em;display:inline-flex;gap:8px;align-items:center}
+.tag:before{content:"";width:8px;height:8px;border-radius:50%;background:var(--o);box-shadow:0 0 14px var(--o)}
+section{padding:clamp(70px,10vw,120px) 0;position:relative}
+.sh{max-width:680px;margin-bottom:44px}
+.sh h2{font-size:clamp(32px,5.2vw,58px);line-height:1.05;letter-spacing:-.03em;margin:14px 0}
+.sh p{color:var(--m)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:14px 24px;border-radius:50px;border:1px solid var(--l);font-weight:700;font-size:14px;transition:transform .3s,box-shadow .3s,border-color .3s;background:none}
+.btn:hover{transform:translateY(-3px);border-color:var(--o)}
+.btn.pri{background:linear-gradient(110deg,#ff9150,var(--o));color:#170d06;border:0;box-shadow:0 10px 34px rgba(255,106,43,.28)}
+#progress{position:fixed;top:0;left:0;height:3px;width:0;background:linear-gradient(90deg,var(--g),var(--o));z-index:300}
+.glow{position:fixed;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(255,106,43,.12),transparent 70%);transform:translate(-50%,-50%);pointer-events:none;z-index:0;left:50%;top:30%}
+/* NAV */
+header{position:fixed;inset:0 0 auto;z-index:100;padding-top:env(safe-area-inset-top);background:rgba(10,9,7,.7);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-bottom:1px solid var(--l)}
+.nav{height:72px;display:flex;align-items:center;justify-content:space-between}
+.logo{font-weight:800;font-size:22px;letter-spacing:-.04em}.logo b{color:var(--o)}
+.links{display:flex;gap:28px;align-items:center}
+.links a{font-size:14px;color:#d4cdc3;transition:color .3s}.links a:hover{color:var(--o)}
+.burger{display:none;background:none;border:0;font-size:28px;padding:6px 10px}
+/* HERO */
+.hero{min-height:100svh;padding:110px 0 60px;display:flex;align-items:center;overflow:hidden;background:radial-gradient(ellipse at 75% 45%,rgba(255,106,43,.16),transparent 55%)}
+.hg{display:grid;grid-template-columns:1fr 1.1fr;gap:20px;align-items:center}
+.hero h1{font-size:clamp(46px,7vw,92px);line-height:.95;letter-spacing:-.05em;margin:20px 0}
+.hero h1 span{display:block;overflow:hidden}
+.hero h1 span i{display:block;font-style:normal;transform:translateY(105%);animation:up 1s cubic-bezier(.2,.8,.2,1) forwards}
+.hero h1 span:nth-child(2) i{animation-delay:.15s}
+@keyframes up{to{transform:none}}
+.hero p.lead{color:var(--m);max-width:480px;font-size:17px}
+.acts{display:flex;gap:12px;flex-wrap:wrap;margin:30px 0}
+.stage{position:relative;height:min(640px,70vh);min-height:380px;touch-action:pan-y}
+#gl{position:absolute;inset:0;width:100%;height:100%}
+.chip{position:absolute;background:rgba(21,17,14,.82);border:1px solid var(--l);backdrop-filter:blur(14px);padding:10px 15px;border-radius:14px;font-size:12px;animation:bob 5s ease-in-out infinite;pointer-events:none}
+.chip b{display:block;font-size:13px}.chip small{color:var(--m)}
+.c1{top:8%;right:2%}.c2{bottom:10%;left:0;animation-delay:-2s}
+@keyframes bob{50%{transform:translateY(-12px)}}
+.scroll{position:absolute;bottom:18px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--m);letter-spacing:.2em}
+.scroll:after{content:"";display:block;width:1px;height:28px;margin:8px auto 0;background:linear-gradient(var(--o),transparent);animation:ln 2s infinite}
+@keyframes ln{0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}51%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+/* MARQUEE */
+.mq{padding:30px 0;border-block:1px solid var(--l);overflow:hidden;background:var(--p)}
+.mt{display:flex;gap:18px;width:max-content;animation:mq 45s linear infinite}
+.mq:hover .mt{animation-play-state:paused}
+.mt img{width:220px;height:150px;object-fit:cover;border-radius:16px;transition:transform .4s}
+.mt img:nth-child(odd){transform:rotate(-2deg)}.mt img:nth-child(even){transform:rotate(2deg) translateY(8px)}
+.mt img:hover{transform:scale(1.08) rotate(0)}
+@keyframes mq{to{transform:translateX(-50%)}}
+/* PRODUCTS */
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:28px}
+.f{background:none;border:1px solid var(--l);color:#bdb4a8;padding:10px 18px;border-radius:40px;font-size:13px;transition:.3s}
+.f.on,.f:hover{background:rgba(255,106,43,.14);border-color:var(--o);color:var(--g)}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;perspective:1200px}
+.card{position:relative;padding:26px;border:1px solid var(--l);border-radius:20px;background:linear-gradient(150deg,var(--p2),var(--p));overflow:hidden;transition:transform .25s ease-out,border-color .3s;transform-style:preserve-3d;will-change:transform;min-height:210px}
+.card:before{content:"";position:absolute;inset:0;background:radial-gradient(260px circle at var(--x,50%) var(--y,0),rgba(255,140,70,.18),transparent 60%);opacity:0;transition:opacity .3s}
+.card:hover{border-color:rgba(255,140,70,.5)}.card:hover:before{opacity:1}
+.card.ft{grid-column:span 1;border-color:rgba(255,106,43,.45)}
+.ic{width:52px;height:52px;border-radius:14px;display:grid;place-items:center;font-size:25px;background:rgba(255,106,43,.14);transform:translateZ(40px);margin-bottom:18px}
+.card h4{font-size:20px;letter-spacing:-.02em;transform:translateZ(25px)}
+.card p{color:var(--m);font-size:14px;margin:8px 0 14px}
+.card em{font-style:normal;font-size:12px;color:var(--g);font-weight:700}
+.card[hidden]{display:none}
+/* AR SHOWCASE */
+.show{background:var(--p);overflow:hidden}
+.sg{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+.sg h2{font-size:clamp(34px,5vw,58px);line-height:1.05;letter-spacing:-.03em;margin:16px 0}
+.sg p{color:var(--m)}
+.ul{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:26px 0;font-size:14px}
+.ul div:before{content:"✦ ";color:var(--o)}
+.phones{height:560px;display:grid;place-items:center;perspective:1400px}
+.phone{width:260px;height:520px;border-radius:40px;border:8px solid #2a231c;background:#000;position:relative;overflow:hidden;box-shadow:0 50px 90px rgba(0,0,0,.7),0 0 70px rgba(255,106,43,.22);transform:rotateY(calc(-22deg + var(--p,0)*44deg)) rotateX(calc(8deg - var(--p,0)*10deg));transition:transform .15s linear;transform-style:preserve-3d}
+.phone img{width:100%;height:100%;object-fit:cover;animation:zoom 9s ease-in-out infinite alternate}
+@keyframes zoom{to{transform:scale(1.18)}}
+.phone:before{content:"";position:absolute;top:10px;left:50%;width:80px;height:22px;background:#000;border-radius:20px;transform:translateX(-50%);z-index:3}
+.scan{position:absolute;left:0;right:0;height:3px;background:var(--o);box-shadow:0 0 25px 6px rgba(255,106,43,.6);animation:sc 3s ease-in-out infinite;z-index:2}
+@keyframes sc{0%,100%{top:12%}50%{top:82%}}
+.hot{position:absolute;z-index:3;background:rgba(10,9,7,.8);backdrop-filter:blur(8px);border:1px solid var(--l);border-radius:12px;padding:8px 12px;font-size:11px;transform:translateZ(60px)}
+.h1{left:14px;bottom:90px}.h2{right:14px;bottom:36px}
+/* ECO */
+.eco{text-align:center}
+.orb{position:relative;width:min(560px,100%);aspect-ratio:1;margin:0 auto}
+.core{position:absolute;inset:34%;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle,#4a2414,#1a110c);border:1px solid var(--o);box-shadow:0 0 70px rgba(255,106,43,.4);font-family:'Bricolage Grotesque';font-weight:800;font-size:clamp(13px,2.5vw,20px);line-height:1.1;z-index:2}
+.ring{position:absolute;inset:0;border:1px dashed rgba(255,194,122,.3);border-radius:50%;animation:spin 40s linear infinite}
+.ring.r2{inset:14%;animation-duration:28s;animation-direction:reverse;border-style:solid;border-color:rgba(255,255,255,.08)}
+.node{position:absolute;left:50%;top:50%;width:0;height:0;transform:rotate(var(--a)) translateY(calc(var(--r)*-1))}
+.node span{position:absolute;display:grid;place-items:center;width:clamp(58px,13vw,84px);aspect-ratio:1;margin:calc(clamp(58px,13vw,84px)/-2);border-radius:50%;background:var(--p2);border:1px solid var(--l);font-size:clamp(20px,4vw,28px);transform:rotate(calc(var(--a)*-1));transition:.3s;animation:cnt 40s linear infinite}
+.node span small{position:absolute;top:100%;margin-top:4px;font-size:10px;color:var(--m);white-space:nowrap}
+.node:hover span{border-color:var(--o);box-shadow:0 0 30px rgba(255,106,43,.4)}
+@keyframes spin{to{transform:rotate(360deg)}}
+.orb .spin{position:absolute;inset:0;animation:spin 40s linear infinite}
+@keyframes cnt{to{transform:rotate(calc(var(--a)*-1 - 360deg))}}
+/* BENEFITS */
+.bg{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.ben{padding:28px;border-radius:20px;border:1px solid var(--l);background:var(--p)}
+.ben i{font-style:normal;font-size:28px;display:block;margin-bottom:16px}
+.ben h3{font-size:19px;margin-bottom:6px}.ben p{color:var(--m);font-size:14px}
+/* PRICING */
+.price{background:var(--p)}
+.bill{display:flex;gap:8px;margin-bottom:34px}
+.pg{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;align-items:stretch}
+.pc{border:1px solid var(--l);border-radius:22px;padding:32px;background:var(--bg);position:relative;display:flex;flex-direction:column}
+.pc.pop{border-color:var(--o);box-shadow:0 0 60px rgba(255,106,43,.14)}
+.pc .pl{position:absolute;top:-12px;right:22px;background:var(--o);color:#170d06;padding:5px 13px;border-radius:20px;font-size:11px;font-weight:800}
+.pc h3{font-size:24px}.pc .d{color:var(--m);font-size:13px;margin:6px 0 20px}
+.amt{font-family:'Bricolage Grotesque';font-size:44px;font-weight:800;letter-spacing:-.03em}.amt small{font-size:13px;color:var(--m);font-weight:500}
+.pc ul{list-style:none;margin:22px 0;flex:1}.pc li{padding:10px 0;border-bottom:1px solid rgba(255,255,255,.06);font-size:14px;color:#d4cdc3}
+.pc li:before{content:"✓";color:var(--o);margin-right:10px}
+.note{text-align:center;color:var(--m);font-size:12px;margin-top:22px}
+/* CTA */
+.cta{padding:0 0 100px}
+.cp{border-radius:30px;overflow:hidden;position:relative;text-align:center;padding:clamp(60px,9vw,110px) 24px;border:1px solid rgba(255,140,70,.4);background:linear-gradient(rgba(10,9,7,.78),rgba(10,9,7,.9)),url('https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=1400&q=70') center/cover}
+.cp h2{font-size:clamp(34px,6vw,70px);letter-spacing:-.04em;line-height:1;margin:16px 0}
+.cp p{color:#c9c1b6;max-width:520px;margin:0 auto 28px}
+/* FOOTER */
+footer{padding:60px 0 calc(24px + env(safe-area-inset-bottom));border-top:1px solid var(--l);background:#070605}
+.fg{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:36px}
+.fg p{color:var(--m);font-size:13px;max-width:300px;margin-top:14px}
+.fg h4{font-size:14px;margin-bottom:14px}.fg a{display:block;color:var(--m);font-size:13px;margin:9px 0;transition:.3s}.fg a:hover{color:var(--o)}
+.fb{border-top:1px solid var(--l);margin-top:40px;padding-top:20px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;color:#7d756b;font-size:12px}
+/* MODAL */
+.modal{position:fixed;inset:0;z-index:400;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(0,0,0,.75);backdrop-filter:blur(10px)}
+.modal.show{display:flex}
+.mb{background:var(--p2);border:1px solid var(--l);border-radius:22px;padding:30px;width:min(460px,100%);max-height:92svh;overflow:auto;position:relative;animation:pop .35s cubic-bezier(.2,.8,.2,1)}
+@keyframes pop{from{opacity:0;transform:translateY(24px) scale(.95)}}
+.mb h2{font-size:28px;margin:10px 0 6px}.mb>p{color:var(--m);font-size:14px;margin-bottom:18px}
+.x{position:absolute;right:16px;top:12px;background:none;border:0;font-size:28px}
+.mb label{display:block;font-size:12px;color:#bdb4a8;margin:12px 0 6px}
+.mb input,.mb select{width:100%;padding:13px;border-radius:10px;border:1px solid var(--l);background:var(--bg);color:var(--w);font:16px 'Manrope';outline:none}
+.mb input:focus,.mb select:focus{border-color:var(--o)}.mb .btn{width:100%;margin-top:18px}
+/* REVEAL */
+.rv{opacity:0;transform:translateY(34px) scale(.98);transition:opacity .9s,transform .9s cubic-bezier(.2,.8,.2,1)}
+.rv.in{opacity:1;transform:none}
+@media(max-width:900px){
+ .links{display:none;position:absolute;top:100%;left:0;right:0;flex-direction:column;align-items:stretch;gap:0;background:var(--p);padding:12px 5%;border-bottom:1px solid var(--l)}
+ .links.open{display:flex}.links a{padding:14px 0;border-bottom:1px solid var(--l)}.links .btn{margin-top:14px}
+ .burger{display:block}
+ .hg,.sg{grid-template-columns:1fr}.hero{padding-top:96px}.stage{height:420px;min-height:0}
+ .grid,.bg,.pg{grid-template-columns:repeat(2,1fr)}.fg{grid-template-columns:1fr 1fr}.fg>div:first-child{grid-column:1/-1}
+ .phones{height:520px}
+}
+@media(max-width:600px){
+ .grid,.bg,.pg{grid-template-columns:1fr}.ul{grid-template-columns:1fr}.mt img{width:170px;height:120px}
+ .stage{height:360px}.c2{display:none}.card{min-height:0}.scroll{display:none}
+}
+@media(prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}.rv{opacity:1;transform:none}.hero h1 span i{transform:none}}
+</style>
+</head>
+<body>
+<div id="progress"></div><div class="glow" id="glow"></div>
+
+<header>
+ <div class="wrap nav">
+  <a href="#home" class="logo">LIVE<b>DISH</b>-AI</a>
+  <nav class="links" id="links">
+   <a href="#products">Products</a><a href="#showcase">3D &amp; AR</a><a href="#platform">Platform</a><a href="#pricing">Pricing</a><a href="#contact">Contact</a>
+   <button class="btn pri" onclick="openM()">Book a demo</button>
+  </nav>
+  <button class="burger" id="burger" aria-label="Toggle menu" aria-expanded="false">☰</button>
+ </div>
+</header>
+
+<section class="hero" id="home">
+ <div class="wrap hg">
+  <div>
+   <div class="tag">Restaurant technology, rebuilt in 3D</div>
+   <h1><span><i>Your menu,</i></span><span><i class="grad">now alive.</i></span></h1>
+   <p class="lead">Show dishes in 3D and AR, take orders, manage tables, stock and staff — all from one connected platform.</p>
+   <div class="acts"><a href="#products" class="btn pri">Explore products</a><button class="btn" onclick="openM()">Book a demo ▶</button></div>
+   <p style="font-size:13px;color:var(--m)">Drag or tilt the plates → they follow you.</p>
+  </div>
+  <div class="stage" id="stage">
+   <canvas id="gl"></canvas>
+   <div class="chip c1"><b>✦ AI powered</b><small>Smarter operations</small></div>
+   <div class="chip c2"><b>◎ 3D + AR</b><small>See it before you order</small></div>
+  </div>
+ </div>
+ <div class="scroll">SCROLL</div>
+</section>
+
+<div class="mq" aria-hidden="true"><div class="mt" id="mt"></div></div>
+
+<section id="products">
+ <div class="wrap">
+  <div class="sh rv"><div class="tag">Product ecosystem</div><h2>Everything a restaurant needs. <span class="grad">One ecosystem.</span></h2><p>From the first scan at the table to the final sales report.</p></div>
+  <div class="filters rv" id="filters">
+   <button class="f on" data-f="all">All</button><button class="f" data-f="x">Customer experience</button><button class="f" data-f="o">Operations</button><button class="f" data-f="a">AI &amp; growth</button>
+  </div>
+  <div class="grid" id="grid"></div>
+ </div>
+</section>
+
+<section class="show" id="showcase">
+ <div class="wrap sg">
+  <div class="rv">
+   <div class="tag">The future is on your table</div>
+   <h2>Don’t just read the menu. <span class="grad">Experience it.</span></h2>
+   <p>Guests scan a QR code, spin each dish in 3D and place it on their table in AR — no app to install.</p>
+   <div class="ul"><div>Interactive 3D dishes</div><div>WebAR placement</div><div>Multi-language menus</div><div>QR-based access</div><div>Dish details</div><div>Online ordering</div></div>
+   <a href="#contact" class="btn pri">See LiveDish AI</a>
+  </div>
+  <div class="phones rv">
+   <div class="phone" id="phone">
+    <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=700&q=75" alt="Dish shown in AR">
+    <div class="scan"></div>
+    <div class="hot h1"><b>Margherita</b><br>₹399 · Veg</div>
+    <div class="hot h2">◎ View in AR</div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<section class="eco" id="platform">
+ <div class="wrap">
+  <div class="sh rv" style="margin-inline:auto"><div class="tag">One connected platform</div><h2>Every part of your restaurant. <span class="grad">Working together.</span></h2></div>
+  <div class="orb rv">
+   <div class="ring"></div><div class="ring r2"></div>
+   <div class="core">LIVE<br>DISH-AI</div>
+   <div class="spin" id="spin"></div>
+  </div>
+ </div>
+</section>
+
+<section id="features" style="padding-top:0">
+ <div class="wrap">
+  <div class="sh rv"><div class="tag">Why LIVE DISH-AI</div><h2>Technology that works as hard as <span class="grad">your kitchen.</span></h2></div>
+  <div class="bg">
+   <div class="ben rv"><i>⚡</i><h3>Operate smarter</h3><p>Move everyday workflows into connected digital tools.</p></div>
+   <div class="ben rv"><i>✦</i><h3>AI-powered efficiency</h3><p>Automate repetitive tasks and decisions.</p></div>
+   <div class="ben rv"><i>🥽</i><h3>Immersive dining</h3><p>Bring 3D and AR into the customer journey.</p></div>
+   <div class="ben rv"><i>📱</i><h3>Mobile first</h3><p>Fast on every phone, tablet and desktop.</p></div>
+   <div class="ben rv"><i>🌍</i><h3>Ready to scale</h3><p>From one café to many branches.</p></div>
+   <div class="ben rv"><i>🔗</i><h3>Connected</h3><p>Guest apps and back-office in one place.</p></div>
+  </div>
+ </div>
+</section>
+
+<section class="price" id="pricing">
+ <div class="wrap">
+  <div class="sh rv"><div class="tag">Simple plans</div><h2>Start small. <span class="grad">Grow without limits.</span></h2></div>
+  <div class="bill rv"><button class="f on" data-b="m">Monthly</button><button class="f" data-b="y">Yearly · save more</button></div>
+  <div class="pg">
+   <div class="pc rv"><h3>Starter</h3><p class="d">Independent cafés and small restaurants.</p><div class="amt" data-m="999" data-y="9990">₹999<small>/month</small></div><ul><li>Digital QR menu</li><li>Up to 50 dishes</li><li>Menu management</li><li>Basic analytics</li><li>Email support</li></ul><button class="btn" onclick="openM('Starter')">Get started</button></div>
+   <div class="pc pop rv"><span class="pl">MOST POPULAR</span><h3>Professional</h3><p class="d">Growing and premium restaurants.</p><div class="amt" data-m="2499" data-y="24990">₹2,499<small>/month</small></div><ul><li>Everything in Starter</li><li>3D food experiences</li><li>WebAR features</li><li>Multi-language menus</li><li>Online ordering</li><li>Customer analytics</li></ul><button class="btn pri" onclick="openM('Professional')">Get started</button></div>
+   <div class="pc rv"><h3>Enterprise</h3><p class="d">Hotel groups and restaurant chains.</p><div class="amt" data-m="4999" data-y="49990">₹4,999<small>/month onwards</small></div><ul><li>Everything in Professional</li><li>Multiple branches</li><li>Central dashboard</li><li>Advanced analytics</li><li>Custom integrations</li><li>Priority support</li></ul><button class="btn" onclick="openM('Enterprise')">Contact sales</button></div>
+  </div>
+  <p class="note">Indicative starting prices. Features and usage limits depend on the selected plan.</p>
+ </div>
+</section>
+
+<section class="cta" id="contact">
+ <div class="wrap"><div class="cp rv">
+  <div class="tag">Let’s build it together</div>
+  <h2>Your restaurant’s next chapter <span class="grad">starts here.</span></h2>
+  <p>Tell us about your restaurant and we’ll arrange a personal demo.</p>
+  <button class="btn pri" onclick="openM()">Book your demo</button>
+ </div></div>
+</section>
+
+<footer>
+ <div class="wrap">
+  <div class="fg">
+   <div><a href="#home" class="logo" style="font-size:22px;margin:0;color:var(--w)">LIVE<b>DISH</b>-AI</a><p>One platform for complete restaurant management.</p></div>
+   <div><h4>Explore</h4><a href="#products">Products</a><a href="#showcase">3D &amp; AR</a><a href="#platform">Platform</a><a href="#pricing">Pricing</a></div>
+   <div><h4>Solutions</h4><a href="#products">AR menu</a><a href="#products">Online ordering</a><a href="#products">Operations</a><a href="#products">AI automation</a></div>
+   <div><h4>Company</h4><a href="#contact">Book a demo</a><a href="#contact">Partnerships</a><a href="mailto:hello@livedish.ai">hello@livedish.ai</a></div>
+  </div>
+  <div class="fb"><span>© <span id="yr"></span> LIVE DISH-AI. All rights reserved.</span><span>One platform. Complete restaurant management.</span></div>
+ </div>
+</footer>
+
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="mh">
+ <div class="mb">
+  <button class="x" onclick="closeM()" aria-label="Close">×</button>
+  <div class="tag">Let’s connect</div><h2 id="mh">Experience LIVE DISH-AI</h2>
+  <p>Share a few details and we’ll follow up with a demo.</p>
+  <form id="form">
+   <label for="n">Your name</label><input id="n" name="name" required autocomplete="name">
+   <label for="e">Email</label><input id="e" name="email" type="email" required autocomplete="email">
+   <label for="r">Restaurant name</label><input id="r" name="restaurant" required>
+   <label for="ps">Interested in</label>
+   <select id="ps" name="product"><option>Complete Restaurant Platform</option><option>LiveDish AI – 3D &amp; AR Menu</option><option>Smart Ordering</option><option>TableBook AI</option><option>Restaurant Operations</option><option>AI Automation</option><option>Starter</option><option>Professional</option><option>Enterprise</option></select>
+   <button class="btn pri" type="submit">Request a demo</button>
+  </form>
+ </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+/* ---------- IMAGES: replace these URLs with your own later ---------- */
+const U=id=>`https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=600&q=75`;
+const IMG=['1569718212165-3a8278d5f624','1513104890138-7c749659a591','1555939594-58d7cb561ad1','1551782450-a2132b4ba21d','1540189549336-e6e99c3679fe','1567620905732-2d1ec7ab7445','1547592180-85f173990554'];
+
+/* ---------- products ---------- */
+const P=[
+['🥽','Scanivore','Immersive AR and AI ordering for every table.','AR experience','x'],
+['🍜','LiveDish AI','Turn menus into 3D and WebAR food experiences.','3D + WebAR','x',1],
+['🛒','Smart Ordering','Dine-in, takeaway and delivery on your own platform.','Online orders','x'],
+['📅','TableBook AI','Live availability and automated reservations.','Reservations','x'],
+['🎁','Foodie Rewards','Points, rewards and referrals that bring guests back.','Loyalty','x'],
+['🤖','FoodMate AI','Dish suggestions based on taste and budget.','AI assistant','x'],
+['👨‍🍳','KitchenFlow','Kitchen display, live order queue and prep timing.','Kitchen','o'],
+['📦','StockChef AI','Stock levels, expiry alerts, suppliers and wastage.','Inventory','o'],
+['📊','RestaurantIQ','Sales analytics and performance reports.','Analytics','o'],
+['👥','StaffMate','Shifts, attendance, leave and team performance.','Staff','o'],
+['🧮','MenuCost AI','Recipe costs, margins and dish profitability.','Food costing','o'],
+['📸','FoodStudio AI','Food visuals and promotional creatives.','Creative studio','a'],
+['💬','WaiterBot AI','A virtual assistant for menu questions and enquiries.','AI chatbot','a'],
+['⭐','ReviewBoost AI','Collect feedback and understand sentiment.','Feedback','a'],
+['🚀','RestaurantMarketing AI','Social campaigns and promotions, generated.','AI marketing','a'],
+['🌐','RestaurantOS','One environment for your essential operations.','All-in-one','a']];
+const grid=document.getElementById('grid');
+grid.innerHTML=P.map(p=>`<article class="card${p[5]?' ft':''}" data-c="${p[4]}"><div class="ic">${p[0]}</div><h4>${p[1]}</h4><p>${p[2]}</p><em>${p[3]}</em></article>`).join('');
+
+/* marquee */
+const mt=document.getElementById('mt');
+mt.innerHTML=[...IMG,...IMG].map((id,i)=>`<img src="${U(id)}" alt="" loading="lazy" onerror="this.style.background='#2a1a10';this.removeAttribute('src')">`).join('');
+
+/* ecosystem orbit */
+const E=[['🍽️','Guest'],['🛒','Orders'],['📅','Tables'],['🎁','Rewards'],['👨‍🍳','Kitchen'],['📦','Stock'],['📊','Analytics'],['🤖','AI']];
+const big=()=>Math.min(document.querySelector('.orb').clientWidth,560)/2*.82;
+const spin=document.getElementById('spin');
+function orbit(){const r=big();spin.innerHTML=E.map((e,i)=>`<div class="node" style="--a:${i*45}deg;--r:${r}px"><span>${e[0]}<small>${e[1]}</small></span></div>`).join('')}
+orbit();addEventListener('resize',orbit);
+
+/* filters */
+document.getElementById('filters').addEventListener('click',e=>{
+ const b=e.target.closest('.f');if(!b)return;
+ document.querySelectorAll('#filters .f').forEach(x=>x.classList.toggle('on',x===b));
+ document.querySelectorAll('.card').forEach(c=>c.hidden=b.dataset.f!=='all'&&c.dataset.c!==b.dataset.f);
+});
+
+/* 3D tilt + spotlight on cards (desktop only) */
+const fine=matchMedia('(hover:hover) and (pointer:fine)').matches;
+if(fine){
+ grid.addEventListener('mousemove',e=>{const c=e.target.closest('.card');if(!c)return;
+  const r=c.getBoundingClientRect(),x=(e.clientX-r.left)/r.width,y=(e.clientY-r.top)/r.height;
+  c.style.transform=`rotateX(${(.5-y)*12}deg) rotateY(${(x-.5)*14}deg) translateZ(10px)`;
+  c.style.setProperty('--x',x*100+'%');c.style.setProperty('--y',y*100+'%')});
+ grid.addEventListener('mouseout',e=>{const c=e.target.closest('.card');if(c)c.style.transform=''});
+ const gl=document.getElementById('glow');
+ addEventListener('mousemove',e=>{gl.style.left=e.clientX+'px';gl.style.top=e.clientY+'px'});
+}else document.getElementById('glow').style.display='none';
+
+/* reveal */
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.12});
+document.querySelectorAll('.rv').forEach((el,i)=>{el.style.transitionDelay=(i%3)*90+'ms';io.observe(el)});
+
+/* nav */
+const bg=document.getElementById('burger'),lk=document.getElementById('links');
+bg.onclick=()=>{const o=lk.classList.toggle('open');bg.textContent=o?'×':'☰';bg.setAttribute('aria-expanded',o)};
+lk.querySelectorAll('a').forEach(a=>a.onclick=()=>{lk.classList.remove('open');bg.textContent='☰'});
+
+/* pricing toggle */
+document.querySelectorAll('[data-b]').forEach(b=>b.onclick=()=>{
+ document.querySelectorAll('[data-b]').forEach(x=>x.classList.toggle('on',x===b));
+ const y=b.dataset.b==='y';
+ document.querySelectorAll('.amt').forEach(a=>a.innerHTML='₹'+Number(y?a.dataset.y:a.dataset.m).toLocaleString('en-IN')+`<small>${y?'/year':'/month'}</small>`);
+});
+
+/* modal */
+const modal=document.getElementById('modal');
+function openM(p){modal.classList.add('show');document.body.style.overflow='hidden';if(p)document.getElementById('ps').value=p}
+function closeM(){modal.classList.remove('show');document.body.style.overflow=''}
+modal.addEventListener('click',e=>{if(e.target===modal)closeM()});
+addEventListener('keydown',e=>{if(e.key==='Escape')closeM()});
+document.getElementById('form').addEventListener('submit',e=>{
+ e.preventDefault();const d=Object.fromEntries(new FormData(e.target));
+ location.href='mailto:hello@livedish.ai?subject='+encodeURIComponent('LIVE DISH-AI Demo Request')+'&body='+encodeURIComponent(`Name: ${d.name}\nEmail: ${d.email}\nRestaurant: ${d.restaurant}\nInterested in: ${d.product}`);
+ closeM();
+});
+document.getElementById('yr').textContent=new Date().getFullYear();
+
+/* scroll: progress bar + phone rotation */
+const pr=document.getElementById('progress'),ph=document.getElementById('phone');
+let sy=0;
+function onScroll(){
+ sy=scrollY;pr.style.width=(sy/(document.documentElement.scrollHeight-innerHeight)*100)+'%';
+ const r=ph.getBoundingClientRect(),p=Math.min(1,Math.max(0,1-(r.top+r.height/2)/innerHeight));
+ ph.style.setProperty('--p',p);
+}
+addEventListener('scroll',onScroll,{passive:true});onScroll();
+
+/* ---------- THREE.JS HERO: orbiting food plates ---------- */
+(function(){
+ if(!window.THREE)return;
+ const cv=document.getElementById('gl'),st=document.getElementById('stage');
+ const R=new THREE.WebGLRenderer({canvas:cv,alpha:true,antialias:true});
+ R.setPixelRatio(Math.min(devicePixelRatio,2));
+ const S=new THREE.Scene(),C=new THREE.PerspectiveCamera(42,1,.1,100),G=new THREE.Group();S.add(G);
+ /* circular mask so photos look like plates */
+ const k=document.createElement('canvas');k.width=k.height=128;const x=k.getContext('2d');
+ x.fillStyle='#000';x.fillRect(0,0,128,128);x.fillStyle='#fff';x.beginPath();x.arc(64,64,62,0,7);x.fill();
+ const mask=new THREE.CanvasTexture(k),L=new THREE.TextureLoader();L.setCrossOrigin('anonymous');
+ const N=IMG.length,plates=[];
+ IMG.forEach((id,i)=>{
+  const m=new THREE.Mesh(new THREE.CircleGeometry(1,64),new THREE.MeshBasicMaterial({map:L.load(U(id)),color:0xffffff,side:THREE.DoubleSide}));
+  const rim=new THREE.Mesh(new THREE.RingGeometry(1,1.07,64),new THREE.MeshBasicMaterial({color:0xffc27a,side:THREE.DoubleSide}));
+  const a=i/N*Math.PI*2,g=new THREE.Group();g.add(m,rim);
+  g.position.set(Math.sin(a)*3.6,0,Math.cos(a)*3.6);g.rotation.y=a;g.userData={a,i};G.add(g);plates.push(g);
+ });
+ /* glowing core rings */
+ const t1=new THREE.Mesh(new THREE.TorusGeometry(1.3,.025,16,100),new THREE.MeshBasicMaterial({color:0xff6a2b}));
+ const t2=new THREE.Mesh(new THREE.TorusGeometry(2.1,.012,16,120),new THREE.MeshBasicMaterial({color:0xffc27a,transparent:true,opacity:.6}));
+ t1.rotation.x=t2.rotation.x=Math.PI/2.2;S.add(t1,t2);
+ /* spice particles */
+ const n=260,pos=new Float32Array(n*3);
+ for(let i=0;i<n*3;i++)pos[i]=(Math.random()-.5)*14;
+ const pg=new THREE.BufferGeometry();pg.setAttribute('position',new THREE.BufferAttribute(pos,3));
+ const pts=new THREE.Points(pg,new THREE.PointsMaterial({color:0xffa060,size:.05,transparent:true,opacity:.8}));S.add(pts);
+ function size(){const w=st.clientWidth,h=st.clientHeight;R.setSize(w,h,false);C.aspect=w/h;
+  C.position.set(0,w<600?2.6:2,w<600?13:10.5);C.lookAt(0,-.2,0);C.updateProjectionMatrix()}
+ size();addEventListener('resize',size);
+ let mx=0,my=0,tx=0,ty=0,drag=0,vel=0,lx=0,vis=true;
+ st.addEventListener('pointermove',e=>{const r=st.getBoundingClientRect();tx=(e.clientX-r.left)/r.width-.5;ty=(e.clientY-r.top)/r.height-.5;
+  if(drag){vel=(e.clientX-lx)*.01;lx=e.clientX}});
+ st.addEventListener('pointerdown',e=>{drag=1;lx=e.clientX});
+ addEventListener('pointerup',()=>drag=0);
+ new IntersectionObserver(e=>vis=e[0].isIntersecting).observe(st);
+ const still=matchMedia('(prefers-reduced-motion:reduce)').matches;
+ let T=0;
+ (function loop(){
+  requestAnimationFrame(loop);if(!vis)return;
+  T+=.01;mx+=(tx-mx)*.06;my+=(ty-my)*.06;
+  G.rotation.y+=(still?0:.004)+vel+(scrollY-sy)*0+0;vel*=.94;
+  G.rotation.y+=scrollY*0.00002;
+  G.rotation.x=my*.35;G.rotation.z=mx*.12;
+  plates.forEach(p=>{p.position.y=Math.sin(T*2+p.userData.i)*.25});
+  t1.rotation.z+=.01;t2.rotation.z-=.006;t1.rotation.y=mx;t2.rotation.y=-mx;
+  pts.rotation.y+=.0007;pts.position.y=Math.sin(T)*.2;
+  R.render(S,C);
+ })();
+})();
+</script>
+</body>
+</html>
